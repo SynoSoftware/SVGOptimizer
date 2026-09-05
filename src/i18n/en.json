@@ -93,10 +93,6 @@
           "raster": {
             "description": "Canvas coverage test, drops hidden shapes",
             "label": "Raster"
-          },
-          "scissor": {
-            "description": "Occlusion-based removal",
-            "label": "Scissor"
           }
         },
         "configure": "Configure",

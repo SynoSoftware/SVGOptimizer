@@ -6,7 +6,7 @@
  * new one, so the next change has to keep clearing it.
  */
 
-export type EngineName = "crop" | "raster" | "scissor";
+export type EngineName = "crop" | "raster";
 
 export type Fixture = {
   name: string;
@@ -65,8 +65,6 @@ export const FIXTURES: Fixture[] = [
     name: "donut",
     guards: "a compound path keeps its hole and its fill-rule",
     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="#444" fill-rule="evenodd" d="M50 5A45 45 0 1 0 50 95A45 45 0 1 0 50 5ZM50 25A25 25 0 1 1 50 75A25 25 0 1 1 50 25Z"/><rect x="40" y="40" width="20" height="20" fill="#0bf"/></svg>',
-    tolerance: { scissor: 1.5 },
-    why: "scissor rebuilds the arcs through paper, which lands the two circle edges a fraction of a unit out. The share of changed pixels falls as the render gets larger, which is what an anti-aliased edge does and what lost geometry does not.",
   },
   {
     name: "transformed",
@@ -117,6 +115,6 @@ export const FIXTURES: Fixture[] = [
     guards: "the real project asset, end to end",
     url: "/logo.svg",
     tolerance: { crop: 1.6 },
-    why: "the two vector engines accept 11 boolean cuts on this file and then trap the cut shapes, which thickens their outlines by design (enableTraps). raster and scissor make no cuts here and match exactly. This is the measurement behind shipping the asset with cuts turned off.",
+    why: "crop accepts 11 boolean cuts on this file and then traps the cut shapes, which thickens their outlines by design (enableTraps). raster makes no cuts here and matches exactly. This is the measurement behind shipping the asset with cuts turned off.",
   },
 ];

@@ -12,7 +12,6 @@
 
 import { optimizeSvg as optimizeCrop } from "../utils/svgOptimizer-crop";
 import { optimizeSvgRaster } from "../utils/svgOptimizer-raster";
-import { optimizeSvg as optimizeScissor } from "../utils/svgOptimizer-scissor";
 import {
   FIXTURES,
   type EngineName,
@@ -63,11 +62,6 @@ export const ENGINES: Record<EngineName, (svg: string) => Promise<EngineRun>> = 
   raster: (s) =>
     optimizeSvgRaster(s).then((r) => ({
       svg: r.optimizedSvg,
-      stats: numericStats(r.stats),
-    })),
-  scissor: (s) =>
-    optimizeScissor(s).then((r) => ({
-      svg: r.svg,
       stats: numericStats(r.stats),
     })),
 };

@@ -93,10 +93,6 @@
           "raster": {
             "description": "Canvas-dekkingstest, verwijdert verborgen vormen",
             "label": "Raster"
-          },
-          "scissor": {
-            "description": "Verwijdering o.b.v. occlusie",
-            "label": "Schaar"
           }
         },
         "configure": "Configureren",

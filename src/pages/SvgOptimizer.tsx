@@ -35,7 +35,6 @@ import {
   Play,
   Plus,
   Replace,
-  Scissors,
   Settings2,
   Timer,
   Trash2,
@@ -54,10 +53,9 @@ import { AnimatePresence, Reorder, useDragControls } from "framer-motion";
 // Replace these with your actual import paths
 import { optimizeSvg as optimizeCrop, DEFAULT_OPTIMIZER_OPTIONS as DEFAULT_CROP_OPTIONS } from "../utils/svgOptimizer-crop";
 import { optimizeSvgRaster as optimizeRaster, DEFAULT_RASTER_OPTIONS } from "../utils/svgOptimizer-raster";
-import { optimizeSvg as optimizeScissor } from "../utils/svgOptimizer-scissor";
 
 // --- TYPES ---
-type ProcessorType = "crop" | "raster" | "scissor";
+type ProcessorType = "crop" | "raster";
 
 interface PipelineStep {
   id: string;
@@ -91,13 +89,6 @@ const ALGORITHM_CONFIG = {
     accentClass: "text-sky-500",
     desc: "Canvas coverage test, drops hidden shapes",
     defaults: DEFAULT_RASTER_OPTIONS,
-  },
-  scissor: {
-    label: "Scissor",
-    icon: Scissors,
-    accentClass: "text-violet-500",
-    desc: "Occlusion-based removal",
-    defaults: { resolution: 1024, sensitivity: 0.5 },
   },
 };
 
@@ -311,28 +302,6 @@ function StepSettings({ type, options, onChange }: { type: ProcessorType; option
             max={0.995}
             step={0.005}
             onChange={(v: number) => onChange("occlusionThreshold", v)}
-          />
-        </div>
-      );
-    case "scissor":
-      return (
-        <div className="grid gap-4 p-2">
-          <SettingSlider
-            label={t("optimizer.pipeline.settings.fields.resolution")}
-            value={options.resolution}
-            min={512}
-            max={4096}
-            step={256}
-            suffix="px"
-            onChange={(v: number) => onChange("resolution", v)}
-          />
-          <SettingSlider
-            label={t("optimizer.pipeline.settings.fields.sensitivity")}
-            value={options.sensitivity}
-            min={0.1}
-            max={1.0}
-            step={0.1}
-            onChange={(v: number) => onChange("sensitivity", v)}
           />
         </div>
       );
@@ -667,7 +636,6 @@ export default function SvgOptimizerPage() {
         let res: any = {};
         if (step.type === "crop") res = await optimizeCrop(currentSvg, step.options, updateStepProgress);
         else if (step.type === "raster") res = await optimizeRaster(currentSvg, step.options, updateStepProgress);
-        else if (step.type === "scissor") res = await optimizeScissor(currentSvg, step.options, updateStepProgress);
 
         const nextSvg = res.optimizedSvg || res.svg;
         if (!nextSvg) throw new Error("step-failed");
