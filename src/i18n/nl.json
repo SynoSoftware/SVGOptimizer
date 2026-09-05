@@ -1,0 +1,269 @@
+{
+  "optimizer": {
+    "actions": {
+      "download": "Download geoptimaliseerd bestand",
+      "optimize": "Optimaliseer geometrie",
+      "reset": "Reset invoer",
+      "upload": "Upload SVG"
+    },
+    "badge": "Geometrie tools",
+    "dropzone": {
+      "cta": "Bestanden bladeren",
+      "dragActive": "Laat los om bestand te laden",
+      "hint": "Alles gebeurt in uw browser. Bestanden tot 5 MB.",
+      "loaded": "{{name}} geladen",
+      "subtitle": "Sleep een .svg bestand hierheen of gebruik de uploader om markup direct te laden.",
+      "title": "Drop SVG of blader bestanden"
+    },
+    "errors": {
+      "empty": "Lever SVG markup aan voordat u de optimizer start.",
+      "environment": "Canvas-ondersteuning is vereist om de optimizer hier te draaien.",
+      "invalidRoot": "De markup moet één enkele <svg> root node bevatten.",
+      "parse": "De SVG kon niet worden verwerkt. Zorg dat het geldige XML is.",
+      "unknown": "We konden dit bestand niet optimaliseren. Probeer een andere SVG."
+    },
+    "form": {
+      "heading": "Geometrie invoer",
+      "inputLabel": "SVG markup",
+      "placeholder": "Plak of drop de volledige <svg>…</svg> markup hier.",
+      "progressLabel": "Geometrie optimaliseren…",
+      "title": "Lever uw SVG aan"
+    },
+    "pipeline": {
+      "buttons": {
+        "run": "Pipeline draaien",
+        "running": "Verwerken..."
+      },
+      "debug": {
+        "copySource": "Kopieer SVG",
+        "copyTree": "Kopieer boomstructuur",
+        "hint": "Vereenvoudigde boomstructuur met ingekorte attributen voor diffing.",
+        "parseError": "Fout bij parsen SVG-structuur."
+      },
+      "empty": {
+        "hint": "Voeg stappen van hierboven toe.",
+        "title": "Pipeline is leeg."
+      },
+      "heading": "SVG optimalisatie pipeline",
+      "history": {
+        "duration": {
+          "minutes": "{{value}} min",
+          "ms": "{{value}} ms",
+          "seconds": "{{value}} s"
+        },
+        "original": "Origineel: {{size}}",
+        "sizeLabel": "Grootte: {{size}}",
+        "step": "{{name}}: {{size}}",
+        "stepSizeFlow": "{{start}} → {{end}}",
+        "timeLabel": "Duur: {{time}}",
+        "totalOptimizedLabel": "Geoptimaliseerd",
+        "totalOriginalLabel": "Origineel",
+        "totalRuntimeLabel": "Totale duur",
+        "totalSavingsLabel": "{{value}}% bespaard"
+      },
+      "panel": {
+        "reorderHint": "Sleep om te herschikken",
+        "title": "Pipeline"
+      },
+      "results": {
+        "finalSize": "Uiteindelijke grootte",
+        "readyBody": "Configureer uw stack links en druk op Run.",
+        "readyTitle": "Klaar om te optimaliseren",
+        "saved": "{{percent}}% bespaard"
+      },
+      "settings": {
+        "algorithms": {
+          "crop": {
+            "description": "Standaard vector boolean cuts",
+            "label": "Geometrie"
+          },
+          "fastcrop": {
+            "description": "Vector boolean cuts, ruimere groottelimieten",
+            "label": "Snel bijsnijden"
+          },
+          "raster": {
+            "description": "Canvas-dekkingstest, verwijdert verborgen vormen",
+            "label": "Raster"
+          },
+          "scissor": {
+            "description": "Verwijdering o.b.v. occlusie",
+            "label": "Schaar"
+          }
+        },
+        "configure": "Configureren",
+        "fields": {
+          "boolean": "Booleaans",
+          "canvasSize": "Canvas grootte",
+          "minPixels": "Min px",
+          "occlusion": "Occlusie",
+          "precision": "Precisie",
+          "resolution": "Resolutie",
+          "sensitivity": "Gevoeligheid",
+          "simplify": "Vereenvoudigen",
+          "toleranceShort": "Tol.",
+          "traps": "Traps"
+        },
+        "toggleLabel": "Stap in-/uitschakelen"
+      },
+      "subheading": "Professionele vectorverwerkingsstack.",
+      "tabs": {
+        "code": "Code",
+        "history": "Pipeline stats",
+        "preview": "Voorbeeld",
+        "resultsLabel": "Resultaat weergaven",
+        "structure": "Debug"
+      },
+      "tooltips": {
+        "download": "Download geoptimaliseerde SVG",
+        "moveOptimizedToSource": "Verplaats geoptimaliseerd resultaat naar bron",
+        "useAsSource": "Gebruik als bron"
+      },
+      "upload": {
+        "cta": "Klik om SVG te uploaden"
+      }
+    },
+    "preview": {
+      "empty": "Plak SVG markup om hier een voorbeeld te zien.",
+      "heading": "Visuele vergelijking",
+      "optimized": "Geoptimaliseerd",
+      "optimizedEmpty": "Draai de optimizer om het geoptimaliseerde voorbeeld te renderen.",
+      "original": "Origineel",
+      "resetView": "Reset weergave",
+      "title": "Pixel-perfecte output",
+      "zoomIn": "Inzoomen",
+      "zoomOut": "Uitzoomen"
+    },
+    "results": {
+      "empty": "Draai de optimizer om de uitvoer hier te zien.",
+      "modalTitle": "Optimalisatieresultaten",
+      "openDialog": "Bekijk in dialoogvenster",
+      "tabs": {
+        "code": "SVG",
+        "preview": "Voorbeeld",
+        "stats": "Stats",
+        "steps": "Stappen"
+      },
+      "tabsLabel": "Resultaat weergaven"
+    },
+    "settings": {
+      "algorithm": {
+        "description": "Kies de pass die het beste past bij de SVG die u optimaliseert.",
+        "geometry": "Alleen geometrie",
+        "heading": "Algoritme",
+        "hybrid": "Geometrie + raster",
+        "raster": "Alleen raster"
+      },
+      "boolean": {
+        "help": "Trek bedekte geometrie af om verborgen lagen te vermijden en bestandsgrootte te verkleinen.",
+        "label": "Booleaanse occlusie"
+      },
+      "description": "Pas precisie en geometrie-trimming aan voordat u de optimizer draait.",
+      "heading": "Afstelling",
+      "minArea": {
+        "help": "Negeer vormen kleiner dan dit oppervlak om vlekjes en artefacten te verwijderen.",
+        "label": "Minimaal padoppervlak (px²)"
+      },
+      "precision": {
+        "help": "Rondt padcoördinaten af op dit aantal decimalen.",
+        "label": "Coördinaatprecisie"
+      },
+      "raster": {
+        "description": "Stel de occlusie-pass af die gebruikt wordt in raster- of hybride modus.",
+        "flatten": {
+          "help": "Vereenvoudigt curves voor het rasteriseren om ruis in maskers te vermijden.",
+          "label": "Flatten tolerantie"
+        },
+        "heading": "Raster verfijning",
+        "minResolution": {
+          "help": "Garandeert dat smalle iconen nog steeds genoeg pixels krijgen tijdens rasterisatie.",
+          "label": "Minimale afmeting"
+        },
+        "occlusion": {
+          "help": "Hogere waarden verbergen meer overlappende pixels; lagere waarden houden meer detail zichtbaar.",
+          "label": "Occlusiedrempel"
+        },
+        "resolution": {
+          "help": "Regelt de interne bitmapgrootte die gebruikt wordt voor occlusiechecks.",
+          "label": "Basis rasterresolutie"
+        },
+        "simplify": {
+          "help": "Trimt paden na rasterverfijning om de output strak te houden.",
+          "label": "Vereenvoudigingstolerantie"
+        }
+      },
+      "simplify": {
+        "help": "Hogere waarden verwijderen meer curvedetail om paden te verkleinen.",
+        "label": "Vereenvoudigingstolerantie"
+      },
+      "traps": {
+        "help": "Voeg een haarlijn toe aan snijranden om mogelijke naden te verbergen.",
+        "label": "Auto trap snijranden"
+      }
+    },
+    "snippet": {
+      "copied": "Gekopieerd",
+      "copy": "Kopieer",
+      "placeholder": "De geoptimaliseerde SVG verschijnt hier na verwerking."
+    },
+    "stats": {
+      "deltaDescription": "Geeft aan hoeveel kleiner de geoptimaliseerde SVG is vergeleken met het origineel.",
+      "deltaHeading": "Procentuele reductie",
+      "duration": "Rekentijd",
+      "heading": "Resultaten",
+      "optimized": "Geoptimaliseerde bytes",
+      "original": "Bron bytes",
+      "placeholder": "-",
+      "saved": "Bytes bespaard",
+      "title": "Compressie samenvatting"
+    },
+    "steps": {
+      "heading": "Algoritme stappen",
+      "items": {
+        "booleanMerged": "Booleaanse unies uitgevoerd",
+        "flattenedTransforms": "Transformaties geplet",
+        "gapRepaired": "Gaten gerepareerd",
+        "hiddenLayers": "Verborgen lagen geëlimineerd",
+        "pathsOptimized": "Paden opnieuw geparameteriseerd",
+        "removedDegenerate": "Degeneratieve vormen getrimd",
+        "removedInvisible": "Verborgen elementen verwijderd"
+      },
+      "placeholder": "Draai de optimizer om de exacte uitgevoerde operaties te zien.",
+      "title": "Wat is er veranderd"
+    },
+    "subtitle": "Strip onzichtbare punten, samengevouwen paden en zero-area nodes terwijl het visuele resultaat identiek blijft.",
+    "tips": {
+      "heading": "Kwaliteitsvangrails",
+      "occlusion": {
+        "body": "Drempelwaarden tussen 0.90 en 0.98 verwijderen rommel terwijl silhouetten intact blijven.",
+        "title": "Houd occlusie gematigd"
+      },
+      "precision": {
+        "body": "Draai eerst de geometrie-modus om vectoren scherp te houden. Schakel over naar hybride of raster als er verborgen lagen overblijven.",
+        "title": "Start met geometrie"
+      },
+      "preview": {
+        "body": "Bekijk het geoptimaliseerde voorbeeld voor het downloaden om naden, ontbrekende lijnen of verdwaalde vullingen te spotten.",
+        "title": "Vergelijk altijd voorbeelden"
+      }
+    },
+    "title": "Lossless SVG optimizer",
+    "workflow": {
+      "heading": "Workflow kaart",
+      "items": {
+        "ingest": {
+          "body": "Drop een bestand of plak markup. De optimizer valideert de root node voordat hij doorgaat.",
+          "title": "1. Laad geometrie"
+        },
+        "review": {
+          "body": "Vergelijk previews, bespaarde bytes en de uitgevoerde stappen voor het downloaden.",
+          "title": "3. Beoordeel output"
+        },
+        "tune": {
+          "body": "Kies de algoritmemodus en pas toleranties aan op basis van icooncomplexiteit.",
+          "title": "2. Stel passes af"
+        }
+      },
+      "title": "Drie bewuste passes"
+    }
+  }
+}

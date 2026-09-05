@@ -1,0 +1,269 @@
+{
+  "optimizer": {
+    "actions": {
+      "download": "Descargar archivo optimizado",
+      "optimize": "Optimizar geometría",
+      "reset": "Restablecer entrada",
+      "upload": "Subir SVG"
+    },
+    "badge": "Herramientas de geometría",
+    "dropzone": {
+      "cta": "Explorar archivos",
+      "dragActive": "Suelte para cargar archivo",
+      "hint": "Todo ocurre en su navegador. Archivos hasta 5 MB.",
+      "loaded": "Cargado {{name}}",
+      "subtitle": "Arrastre un archivo .svg aquí o use el cargador para cargar el marcado al instante.",
+      "title": "Suelte SVG o explore archivos"
+    },
+    "errors": {
+      "empty": "Proporcione marcado SVG antes de ejecutar el optimizador.",
+      "environment": "Se requiere soporte de Canvas para ejecutar el optimizador aquí.",
+      "invalidRoot": "El marcado debe incluir un único nodo raíz <svg>.",
+      "parse": "El SVG no pudo ser analizado. Asegúrese de que sea XML bien formado.",
+      "unknown": "No pudimos optimizar este archivo. Por favor intente otro SVG."
+    },
+    "form": {
+      "heading": "Entrada de geometría",
+      "inputLabel": "Marcado SVG",
+      "placeholder": "Pegue o suelte el marcado <svg>…</svg> completo aquí.",
+      "progressLabel": "Optimizando geometría…",
+      "title": "Proporcione su SVG"
+    },
+    "pipeline": {
+      "buttons": {
+        "run": "Ejecutar pipeline",
+        "running": "Procesando..."
+      },
+      "debug": {
+        "copySource": "Copiar SVG",
+        "copyTree": "Copiar árbol",
+        "hint": "Árbol simplificado con atributos truncados para comparar diferencias.",
+        "parseError": "Error analizando estructura SVG."
+      },
+      "empty": {
+        "hint": "Añada pasos desde arriba.",
+        "title": "El pipeline está vacío."
+      },
+      "heading": "Pipeline de optimización SVG",
+      "history": {
+        "duration": {
+          "minutes": "{{value}} min",
+          "ms": "{{value}} ms",
+          "seconds": "{{value}} s"
+        },
+        "original": "Original: {{size}}",
+        "sizeLabel": "Tamaño: {{size}}",
+        "step": "{{name}}: {{size}}",
+        "stepSizeFlow": "{{start}} → {{end}}",
+        "timeLabel": "Tiempo: {{time}}",
+        "totalOptimizedLabel": "Optimizado",
+        "totalOriginalLabel": "Original",
+        "totalRuntimeLabel": "Tiempo total",
+        "totalSavingsLabel": "Ahorrado {{value}}%"
+      },
+      "panel": {
+        "reorderHint": "Arrastre para reordenar",
+        "title": "Pipeline"
+      },
+      "results": {
+        "finalSize": "Tamaño final",
+        "readyBody": "Configure su pila a la izquierda y presione Ejecutar.",
+        "readyTitle": "Listo para optimizar",
+        "saved": "Ahorrado {{percent}}%"
+      },
+      "settings": {
+        "algorithms": {
+          "crop": {
+            "description": "Cortes booleanos vectoriales estándar",
+            "label": "Geometría"
+          },
+          "fastcrop": {
+            "description": "Cortes booleanos vectoriales, límites de tamaño más flexibles",
+            "label": "Recorte rápido"
+          },
+          "raster": {
+            "description": "Prueba de cobertura en lienzo, elimina formas ocultas",
+            "label": "Raster"
+          },
+          "scissor": {
+            "description": "Eliminación basada en oclusión",
+            "label": "Tijera"
+          }
+        },
+        "configure": "Configurar",
+        "fields": {
+          "boolean": "Booleano",
+          "canvasSize": "Tamaño Canvas",
+          "minPixels": "Mín px",
+          "occlusion": "Oclusión",
+          "precision": "Precisión",
+          "resolution": "Resolución",
+          "sensitivity": "Sensibilidad",
+          "simplify": "Simplificar",
+          "toleranceShort": "Tol.",
+          "traps": "Traps"
+        },
+        "toggleLabel": "Alternar paso"
+      },
+      "subheading": "Pila de procesamiento vectorial de grado profesional.",
+      "tabs": {
+        "code": "Código",
+        "history": "Estadísticas",
+        "preview": "Vista previa",
+        "resultsLabel": "Vistas de resultados",
+        "structure": "Depurar"
+      },
+      "tooltips": {
+        "download": "Descargar SVG optimizado",
+        "moveOptimizedToSource": "Mover resultado optimizado a fuente",
+        "useAsSource": "Usar como fuente"
+      },
+      "upload": {
+        "cta": "Clic para subir SVG"
+      }
+    },
+    "preview": {
+      "empty": "Pegue marcado SVG para previsualizarlo aquí.",
+      "heading": "Comparación visual",
+      "optimized": "Optimizado",
+      "optimizedEmpty": "Ejecute el optimizador para renderizar la vista previa optimizada.",
+      "original": "Original",
+      "resetView": "Restablecer vista",
+      "title": "Salida pixel-perfect",
+      "zoomIn": "Acercar",
+      "zoomOut": "Alejar"
+    },
+    "results": {
+      "empty": "Ejecute el optimizador para ver la salida aquí.",
+      "modalTitle": "Resultados de optimización",
+      "openDialog": "Ver en diálogo",
+      "tabs": {
+        "code": "SVG",
+        "preview": "Vista previa",
+        "stats": "Estadísticas",
+        "steps": "Pasos"
+      },
+      "tabsLabel": "Vistas de resultados"
+    },
+    "settings": {
+      "algorithm": {
+        "description": "Elija el pase que mejor coincida con el SVG que está optimizando.",
+        "geometry": "Solo geometría",
+        "heading": "Algoritmo",
+        "hybrid": "Geometría + raster",
+        "raster": "Solo raster"
+      },
+      "boolean": {
+        "help": "Resta geometría cubierta para evitar capas ocultas y reducir tamaño de archivo.",
+        "label": "Oclusión booleana"
+      },
+      "description": "Ajuste precisión y recorte de geometría antes de ejecutar el optimizador.",
+      "heading": "Afinación",
+      "minArea": {
+        "help": "Descarta formas más pequeñas que esta área para eliminar manchas y artefactos.",
+        "label": "Área de ruta mínima (px²)"
+      },
+      "precision": {
+        "help": "Redondea coordenadas de ruta a estos decimales.",
+        "label": "Precisión de coordenadas"
+      },
+      "raster": {
+        "description": "Afine el pase de oclusión usado en modo raster o híbrido.",
+        "flatten": {
+          "help": "Simplifica curvas antes de rasterizar para evitar máscaras ruidosas.",
+          "label": "Tolerancia de aplanado"
+        },
+        "heading": "Refinamiento raster",
+        "minResolution": {
+          "help": "Garantiza que los iconos estrechos obtengan suficientes píxeles durante la rasterización.",
+          "label": "Dimensión mínima"
+        },
+        "occlusion": {
+          "help": "Valores más altos ocultan más píxeles superpuestos; valores más bajos mantienen más detalle visible.",
+          "label": "Umbral de oclusión"
+        },
+        "resolution": {
+          "help": "Controla el tamaño interno del mapa de bits usado para comprobaciones de oclusión.",
+          "label": "Resolución base de raster"
+        },
+        "simplify": {
+          "help": "Recorta rutas tras refinamiento raster para mantener la salida compacta.",
+          "label": "Tolerancia de simplificación"
+        }
+      },
+      "simplify": {
+        "help": "Valores más altos eliminan más detalle de curva para encoger rutas.",
+        "label": "Tolerancia de simplificación"
+      },
+      "traps": {
+        "help": "Añade un trazo fino para cortar sólidos y ocultar posibles costuras.",
+        "label": "Auto trap bordes de corte"
+      }
+    },
+    "snippet": {
+      "copied": "Copiado",
+      "copy": "Copiar",
+      "placeholder": "El SVG optimizado aparecerá aquí tras procesar."
+    },
+    "stats": {
+      "deltaDescription": "Representa cuánto más pequeño es el SVG optimizado comparado con el original.",
+      "deltaHeading": "Porcentaje de reducción",
+      "duration": "Tiempo de cómputo",
+      "heading": "Resultados",
+      "optimized": "Bytes optimizados",
+      "original": "Bytes fuente",
+      "placeholder": "-",
+      "saved": "Bytes ahorrados",
+      "title": "Resumen de compresión"
+    },
+    "steps": {
+      "heading": "Pasos del algoritmo",
+      "items": {
+        "booleanMerged": "Uniones booleanas ejecutadas",
+        "flattenedTransforms": "Transformaciones aplanadas",
+        "gapRepaired": "Huecos reparados",
+        "hiddenLayers": "Capas ocultas eliminadas",
+        "pathsOptimized": "Rutas re-parametrizadas",
+        "removedDegenerate": "Formas degeneradas recortadas",
+        "removedInvisible": "Elementos ocultos eliminados"
+      },
+      "placeholder": "Ejecute el optimizador para ver las operaciones exactas realizadas.",
+      "title": "Qué cambió"
+    },
+    "subtitle": "Elimine puntos invisibles, rutas colapsadas y nodos de área cero manteniendo el resultado visual idéntico.",
+    "tips": {
+      "heading": "Protecciones de calidad",
+      "occlusion": {
+        "body": "Umbrales entre 0.90 y 0.98 eliminan desorden mientras mantienen siluetas intactas.",
+        "title": "Mantenga la oclusión moderada"
+      },
+      "precision": {
+        "body": "Ejecute modo geometría primero para mantener vectores nítidos. Cambie a híbrido o raster solo cuando queden capas ocultas.",
+        "title": "Empiece con geometría"
+      },
+      "preview": {
+        "body": "Mire la vista previa optimizada antes de descargar para detectar costuras, trazos faltantes o rellenos perdidos.",
+        "title": "Siempre compare vistas previas"
+      }
+    },
+    "title": "Optimizador SVG sin pérdida",
+    "workflow": {
+      "heading": "Mapa de flujo de trabajo",
+      "items": {
+        "ingest": {
+          "body": "Suelte un archivo o pegue marcado. El optimizador valida el nodo raíz antes de continuar.",
+          "title": "1. Cargar geometría"
+        },
+        "review": {
+          "body": "Compare vistas previas, bytes ahorrados y pasos ejecutados antes de descargar.",
+          "title": "3. Revisar salida"
+        },
+        "tune": {
+          "body": "Elija el modo de algoritmo y ajuste tolerancias según la complejidad del icono.",
+          "title": "2. Afinar pases"
+        }
+      },
+      "title": "Tres pases deliberados"
+    }
+  }
+}

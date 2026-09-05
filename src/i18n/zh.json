@@ -1,0 +1,269 @@
+{
+  "optimizer": {
+    "actions": {
+      "download": "下载优化后的文件",
+      "optimize": "优化几何体",
+      "reset": "重置输入",
+      "upload": "上传 SVG"
+    },
+    "badge": "几何工具",
+    "dropzone": {
+      "cta": "浏览文件",
+      "dragActive": "松开以加载文件",
+      "hint": "一切都在您的浏览器中进行。文件最大 5 MB。",
+      "loaded": "已加载 {{name}}",
+      "subtitle": "将 .svg 文件拖到此处或使用上传器即时加载代码。",
+      "title": "拖放 SVG 或浏览文件"
+    },
+    "errors": {
+      "empty": "运行优化器前请提供 SVG 代码。",
+      "environment": "在此运行优化器需要 Canvas 支持。",
+      "invalidRoot": "标记必须包含单个 <svg> 根节点。",
+      "parse": "无法解析 SVG。请确保它是格式良好的 XML。",
+      "unknown": "我们无法优化此文件。请尝试另一个 SVG。"
+    },
+    "form": {
+      "heading": "几何输入",
+      "inputLabel": "SVG 代码",
+      "placeholder": "在此粘贴或拖放完整的 <svg>…</svg> 代码。",
+      "progressLabel": "正在优化几何体…",
+      "title": "提供您的 SVG"
+    },
+    "pipeline": {
+      "buttons": {
+        "run": "运行管道",
+        "running": "处理中..."
+      },
+      "debug": {
+        "copySource": "复制 SVG",
+        "copyTree": "复制树",
+        "hint": "带有截断属性的简化树，用于差异比较。",
+        "parseError": "解析 SVG 结构时出错。"
+      },
+      "empty": {
+        "hint": "从上方添加步骤。",
+        "title": "管道为空。"
+      },
+      "heading": "SVG 优化管道",
+      "history": {
+        "duration": {
+          "minutes": "{{value}} 分",
+          "ms": "{{value}} 毫秒",
+          "seconds": "{{value}} 秒"
+        },
+        "original": "原始：{{size}}",
+        "sizeLabel": "大小：{{size}}",
+        "step": "{{name}}：{{size}}",
+        "stepSizeFlow": "{{start}} → {{end}}",
+        "timeLabel": "耗时：{{time}}",
+        "totalOptimizedLabel": "已优化",
+        "totalOriginalLabel": "原始",
+        "totalRuntimeLabel": "总耗时",
+        "totalSavingsLabel": "节省 {{value}}%"
+      },
+      "panel": {
+        "reorderHint": "拖动以重新排序",
+        "title": "管道"
+      },
+      "results": {
+        "finalSize": "最终大小",
+        "readyBody": "在左侧配置您的堆栈并点击运行。",
+        "readyTitle": "准备优化",
+        "saved": "节省 {{percent}}%"
+      },
+      "settings": {
+        "algorithms": {
+          "crop": {
+            "description": "标准矢量布尔切割",
+            "label": "几何"
+          },
+          "fastcrop": {
+            "description": "矢量布尔切割，尺寸限制更宽松",
+            "label": "快速裁剪"
+          },
+          "raster": {
+            "description": "画布覆盖检测，移除被遮挡的图形",
+            "label": "光栅"
+          },
+          "scissor": {
+            "description": "基于遮挡的移除",
+            "label": "剪刀"
+          }
+        },
+        "configure": "配置",
+        "fields": {
+          "boolean": "布尔运算",
+          "canvasSize": "画布大小",
+          "minPixels": "最小像素",
+          "occlusion": "遮挡",
+          "precision": "精度",
+          "resolution": "分辨率",
+          "sensitivity": "灵敏度",
+          "simplify": "简化",
+          "toleranceShort": "容差",
+          "traps": "陷印"
+        },
+        "toggleLabel": "切换步骤"
+      },
+      "subheading": "专业级矢量处理堆栈。",
+      "tabs": {
+        "code": "代码",
+        "history": "管道统计",
+        "preview": "预览",
+        "resultsLabel": "结果视图",
+        "structure": "调试"
+      },
+      "tooltips": {
+        "download": "下载优化后的 SVG",
+        "moveOptimizedToSource": "将优化结果移至源",
+        "useAsSource": "用作源"
+      },
+      "upload": {
+        "cta": "点击上传 SVG"
+      }
+    },
+    "preview": {
+      "empty": "粘贴 SVG 代码以在此预览。",
+      "heading": "视觉对比",
+      "optimized": "已优化",
+      "optimizedEmpty": "运行优化器以渲染优化后的预览。",
+      "original": "原始",
+      "resetView": "重置视图",
+      "title": "像素级完美输出",
+      "zoomIn": "放大",
+      "zoomOut": "缩小"
+    },
+    "results": {
+      "empty": "运行优化器以在此查看输出。",
+      "modalTitle": "优化结果",
+      "openDialog": "在对话框中查看",
+      "tabs": {
+        "code": "SVG",
+        "preview": "预览",
+        "stats": "统计",
+        "steps": "步骤"
+      },
+      "tabsLabel": "结果视图"
+    },
+    "settings": {
+      "algorithm": {
+        "description": "选择最匹配您正在优化的 SVG 的通道。",
+        "geometry": "仅几何",
+        "heading": "算法",
+        "hybrid": "几何 + 光栅",
+        "raster": "仅光栅"
+      },
+      "boolean": {
+        "help": "减去被覆盖的几何体以避免隐藏层并减小文件大小。",
+        "label": "布尔遮挡"
+      },
+      "description": "在运行优化器之前调整精度和几何修剪。",
+      "heading": "调优",
+      "minArea": {
+        "help": "丢弃小于此面积的形状以移除斑点和伪影。",
+        "label": "最小路径面积 (px²)"
+      },
+      "precision": {
+        "help": "将路径坐标四舍五入到此小数位。",
+        "label": "坐标精度"
+      },
+      "raster": {
+        "description": "调整在光栅或混合模式中使用的遮挡通道。",
+        "flatten": {
+          "help": "在光栅化之前简化曲线以避免噪点遮罩。",
+          "label": "平坦化容差"
+        },
+        "heading": "光栅精炼",
+        "minResolution": {
+          "help": "保证狭窄的图标在光栅化期间仍获得足够的像素。",
+          "label": "最小尺寸"
+        },
+        "occlusion": {
+          "help": "较高的值隐藏更多重叠像素；较低的值保持更多细节可见。",
+          "label": "遮挡阈值"
+        },
+        "resolution": {
+          "help": "控制用于遮挡检查的内部位图大小。",
+          "label": "基础光栅分辨率"
+        },
+        "simplify": {
+          "help": "在光栅精炼后修剪路径以保持输出紧凑。",
+          "label": "简化容差"
+        }
+      },
+      "simplify": {
+        "help": "较高的值移除更多曲线细节以缩小路径。",
+        "label": "简化容差"
+      },
+      "traps": {
+        "help": "添加细线描边以切割实体从而隐藏可能的接缝。",
+        "label": "自动陷印切割边缘"
+      }
+    },
+    "snippet": {
+      "copied": "已复制",
+      "copy": "复制",
+      "placeholder": "优化后的 SVG 将在处理后出现在这里。"
+    },
+    "stats": {
+      "deltaDescription": "表示优化后的 SVG 与原始文件相比小了多少。",
+      "deltaHeading": "减少百分比",
+      "duration": "计算时间",
+      "heading": "结果",
+      "optimized": "优化后字节",
+      "original": "源字节",
+      "placeholder": "-",
+      "saved": "节省字节",
+      "title": "压缩摘要"
+    },
+    "steps": {
+      "heading": "算法步骤",
+      "items": {
+        "booleanMerged": "已执行布尔联合",
+        "flattenedTransforms": "已平坦化变换",
+        "gapRepaired": "已修复间隙",
+        "hiddenLayers": "已消除隐藏层",
+        "pathsOptimized": "路径已重新参数化",
+        "removedDegenerate": "已修剪退化形状",
+        "removedInvisible": "已移除隐藏元素"
+      },
+      "placeholder": "运行优化器以查看执行的确切操作。",
+      "title": "变更内容"
+    },
+    "subtitle": "剥离不可见点、折叠路径和零面积节点，同时保持视觉结果完全相同。",
+    "tips": {
+      "heading": "质量护栏",
+      "occlusion": {
+        "body": "0.90 到 0.98 之间的阈值可移除杂乱同时保持轮廓完整。",
+        "title": "保持适度遮挡"
+      },
+      "precision": {
+        "body": "首先运行几何模式以保持清晰的矢量。仅当仍有隐藏层时切换到混合或仅光栅模式。",
+        "title": "从几何开始"
+      },
+      "preview": {
+        "body": "下载前查看优化后的预览，以发现接缝、缺失的描边或杂散的填充。",
+        "title": "始终对比预览"
+      }
+    },
+    "title": "无损 SVG 优化器",
+    "workflow": {
+      "heading": "工作流图",
+      "items": {
+        "ingest": {
+          "body": "拖放文件或粘贴代码。优化器在继续之前会验证根节点。",
+          "title": "1. 加载几何体"
+        },
+        "review": {
+          "body": "在下载之前对比预览、节省的字节和执行的步骤。",
+          "title": "3. 审查输出"
+        },
+        "tune": {
+          "body": "选择算法模式并根据图标复杂度调整容差。",
+          "title": "2. 调整通道"
+        }
+      },
+      "title": "三个精心设计的步骤"
+    }
+  }
+}

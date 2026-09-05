@@ -1,0 +1,269 @@
+{
+  "optimizer": {
+    "actions": {
+      "download": "Download optimized file",
+      "optimize": "Optimize geometry",
+      "reset": "Reset input",
+      "upload": "Upload SVG"
+    },
+    "badge": "Geometry tooling",
+    "dropzone": {
+      "cta": "Browse files",
+      "dragActive": "Release to load file",
+      "hint": "Everything happens in your browser. Files up to 5 MB.",
+      "loaded": "Loaded {{name}}",
+      "subtitle": "Drag an .svg file here or use the uploader to load markup instantly.",
+      "title": "Drop SVG or browse files"
+    },
+    "errors": {
+      "empty": "Provide SVG markup before running the optimizer.",
+      "environment": "Canvas support is required to run the optimizer here.",
+      "invalidRoot": "The markup must include a single <svg> root node.",
+      "parse": "The SVG could not be parsed. Ensure it is well-formed XML.",
+      "unknown": "We could not optimize this file. Please try another SVG."
+    },
+    "form": {
+      "heading": "Geometry input",
+      "inputLabel": "SVG markup",
+      "placeholder": "Paste or drop the full <svg>…</svg> markup here.",
+      "progressLabel": "Optimizing geometry…",
+      "title": "Provide your SVG"
+    },
+    "pipeline": {
+      "buttons": {
+        "run": "Run pipeline",
+        "running": "Processing..."
+      },
+      "debug": {
+        "copySource": "Copy SVG",
+        "copyTree": "Copy tree",
+        "hint": "Simplified tree with truncated attributes for diffing.",
+        "parseError": "Error parsing SVG structure."
+      },
+      "empty": {
+        "hint": "Add steps from above.",
+        "title": "Pipeline is empty."
+      },
+      "heading": "SVG optimization pipeline",
+      "history": {
+        "duration": {
+          "minutes": "{{value}} min",
+          "ms": "{{value}} ms",
+          "seconds": "{{value}} s"
+        },
+        "original": "Original: {{size}}",
+        "sizeLabel": "Size: {{size}}",
+        "step": "{{name}}: {{size}}",
+        "stepSizeFlow": "{{start}} → {{end}}",
+        "timeLabel": "Runtime: {{time}}",
+        "totalOptimizedLabel": "Optimized",
+        "totalOriginalLabel": "Original",
+        "totalRuntimeLabel": "Total runtime",
+        "totalSavingsLabel": "Saved {{value}}%"
+      },
+      "panel": {
+        "reorderHint": "Drag to reorder",
+        "title": "Pipeline"
+      },
+      "results": {
+        "finalSize": "Final size",
+        "readyBody": "Configure your stack on the left and hit Run.",
+        "readyTitle": "Ready to optimize",
+        "saved": "Saved {{percent}}%"
+      },
+      "settings": {
+        "algorithms": {
+          "crop": {
+            "description": "Standard vector boolean cuts",
+            "label": "Geometry"
+          },
+          "fastcrop": {
+            "description": "Vector boolean cuts, looser size guards",
+            "label": "Fast crop"
+          },
+          "raster": {
+            "description": "Canvas coverage test, drops hidden shapes",
+            "label": "Raster"
+          },
+          "scissor": {
+            "description": "Occlusion-based removal",
+            "label": "Scissor"
+          }
+        },
+        "configure": "Configure",
+        "fields": {
+          "boolean": "Boolean",
+          "canvasSize": "Canvas size",
+          "minPixels": "Min px",
+          "occlusion": "Occlusion",
+          "precision": "Precision",
+          "resolution": "Resolution",
+          "sensitivity": "Sensitivity",
+          "simplify": "Simplify",
+          "toleranceShort": "Tol.",
+          "traps": "Traps"
+        },
+        "toggleLabel": "Toggle step"
+      },
+      "subheading": "Professional grade vector processing stack.",
+      "tabs": {
+        "code": "Code",
+        "history": "Pipeline stats",
+        "preview": "Preview",
+        "resultsLabel": "Result views",
+        "structure": "Debug"
+      },
+      "tooltips": {
+        "download": "Download optimized SVG",
+        "moveOptimizedToSource": "Move optimized result to source",
+        "useAsSource": "Use as source"
+      },
+      "upload": {
+        "cta": "Click to upload SVG"
+      }
+    },
+    "preview": {
+      "empty": "Paste SVG markup to preview it here.",
+      "heading": "Visual comparison",
+      "optimized": "Optimized",
+      "optimizedEmpty": "Run the optimizer to render the optimized preview.",
+      "original": "Original",
+      "resetView": "Reset view",
+      "title": "Pixel-matched output",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out"
+    },
+    "results": {
+      "empty": "Run the optimizer to view output here.",
+      "modalTitle": "Optimization results",
+      "openDialog": "View in dialog",
+      "tabs": {
+        "code": "SVG",
+        "preview": "Preview",
+        "stats": "Stats",
+        "steps": "Steps"
+      },
+      "tabsLabel": "Result views"
+    },
+    "settings": {
+      "algorithm": {
+        "description": "Pick the pass that best matches the SVG you are optimizing.",
+        "geometry": "Geometry only",
+        "heading": "Algorithm",
+        "hybrid": "Geometry + raster",
+        "raster": "Raster only"
+      },
+      "boolean": {
+        "help": "Subtract covered geometry to avoid hidden layers and reduce file size.",
+        "label": "Boolean occlusion"
+      },
+      "description": "Adjust precision and geometry trimming before running the optimizer.",
+      "heading": "Tuning",
+      "minArea": {
+        "help": "Drop shapes smaller than this area to remove specks and artifacts.",
+        "label": "Minimum path area (px²)"
+      },
+      "precision": {
+        "help": "Rounds path coordinates to this many decimals.",
+        "label": "Coordinate precision"
+      },
+      "raster": {
+        "description": "Tune the occlusion pass used in raster or hybrid mode.",
+        "flatten": {
+          "help": "Simplifies curves before rasterizing to avoid noisy masks.",
+          "label": "Flatten tolerance"
+        },
+        "heading": "Raster refinement",
+        "minResolution": {
+          "help": "Guarantees narrow icons still get enough pixels during rasterization.",
+          "label": "Minimum dimension"
+        },
+        "occlusion": {
+          "help": "Higher values hide more overlapping pixels; lower values keep more detail visible.",
+          "label": "Occlusion threshold"
+        },
+        "resolution": {
+          "help": "Controls the internal bitmap size used for occlusion checks.",
+          "label": "Base raster resolution"
+        },
+        "simplify": {
+          "help": "Trims paths after raster refinement to keep output tight.",
+          "label": "Simplify tolerance"
+        }
+      },
+      "simplify": {
+        "help": "Higher values remove more curve detail to shrink paths.",
+        "label": "Simplification tolerance"
+      },
+      "traps": {
+        "help": "Add a hairline stroke to cut solids to hide possible seams.",
+        "label": "Auto trap cut edges"
+      }
+    },
+    "snippet": {
+      "copied": "Copied",
+      "copy": "Copy",
+      "placeholder": "The optimized SVG will appear here after processing."
+    },
+    "stats": {
+      "deltaDescription": "Represents how much smaller the optimized SVG is compared to the original.",
+      "deltaHeading": "Percent reduction",
+      "duration": "Compute time",
+      "heading": "Results",
+      "optimized": "Optimized bytes",
+      "original": "Source bytes",
+      "placeholder": "-",
+      "saved": "Bytes saved",
+      "title": "Compression summary"
+    },
+    "steps": {
+      "heading": "Algorithm steps",
+      "items": {
+        "booleanMerged": "Boolean unions executed",
+        "flattenedTransforms": "Transforms flattened",
+        "gapRepaired": "Gap repairs applied",
+        "hiddenLayers": "Hidden layers eliminated",
+        "pathsOptimized": "Paths re-parameterized",
+        "removedDegenerate": "Degenerate shapes trimmed",
+        "removedInvisible": "Hidden elements removed"
+      },
+      "placeholder": "Run the optimizer to see the exact operations performed.",
+      "title": "What changed"
+    },
+    "subtitle": "Strip invisible points, collapsed paths, and zero-area nodes while keeping the visual result identical.",
+    "tips": {
+      "heading": "Quality guardrails",
+      "occlusion": {
+        "body": "Thresholds between 0.90 and 0.98 remove clutter while keeping silhouettes intact.",
+        "title": "Keep occlusion moderate"
+      },
+      "precision": {
+        "body": "Run geometry mode first to keep crisp vectors. Switch to hybrid or raster only when hidden layers remain.",
+        "title": "Start with geometry"
+      },
+      "preview": {
+        "body": "Look at the optimized preview before downloading to catch seams, missing strokes, or stray fills.",
+        "title": "Always compare previews"
+      }
+    },
+    "title": "Lossless SVG optimizer",
+    "workflow": {
+      "heading": "Workflow map",
+      "items": {
+        "ingest": {
+          "body": "Drop a file or paste markup. The optimizer validates the root node before continuing.",
+          "title": "1. Load geometry"
+        },
+        "review": {
+          "body": "Compare previews, bytes saved, and the executed steps before downloading.",
+          "title": "3. Review output"
+        },
+        "tune": {
+          "body": "Pick the algorithm mode and adjust tolerances to match icon complexity.",
+          "title": "2. Tune passes"
+        }
+      },
+      "title": "Three deliberate passes"
+    }
+  }
+}
