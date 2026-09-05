@@ -1,4 +1,17 @@
 {
+  "common": {
+    "language": {
+      "label": "Taal",
+      "en": "English",
+      "nl": "Nederlands"
+    },
+    "theme": {
+      "label": "Thema",
+      "light": "Licht",
+      "dark": "Donker",
+      "toggle": "Thema wisselen"
+    }
+  },
   "optimizer": {
     "actions": {
       "download": "Download geoptimaliseerd bestand",

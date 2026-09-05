@@ -1,15 +1,55 @@
 @import "tailwindcss";
-@plugin './hero.ts';
+@import "@heroui/styles";
 
-@source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
-@custom-variant dark (&:is(.dark *));
+/*
+ * HeroUI 3 derives every hover, soft and disabled variant from these base
+ * colours with color-mix(), and var() is late-bound, so overriding the bases
+ * cascades through the whole component set. Do not restate the derived tokens.
+ *
+ * v3 ships its own dark variant covering .dark, [data-theme="dark"] and
+ * prefers-color-scheme, so none is declared here. useColorMode puts the .dark
+ * class on <html>.
+ */
+@layer theme {
+  :root,
+  .light,
+  [data-theme="light"] {
+    --background: #f3fbf6;
+    --foreground: #1c1c1c;
+    --surface: #ffffff;
+    --surface-secondary: #f0fdf4;
+    --surface-tertiary: #dcfce7;
+    --overlay: #ffffff;
+    --border: #c8e6c9;
+    --separator: #c8e6c9;
+    --accent: #009f6b;
+    --accent-foreground: #ffffff;
+    --success: #00a86b;
+    --success-foreground: #ffffff;
+    --warning: #f5a623;
+    --warning-foreground: var(--eclipse);
+    --danger: #d64545;
+    --danger-foreground: #ffffff;
+  }
 
-/* index.css - AGGRESSIVE TUNING FOR VISIBILITY */
-@layer components {
-  main [data-slot="input-wrapper"],
-  main [data-slot="trigger"],
-  main [data-slot="inner-wrapper"] {
-    background-color: hsl(var(--heroui-content1)) !important;
+  .dark,
+  [data-theme="dark"] {
+    --background: #0f1112;
+    --foreground: #f5f5f5;
+    --surface: #1a1c1e;
+    --surface-secondary: #242628;
+    --surface-tertiary: #2e3033;
+    --overlay: #1a1c1e;
+    --border: #2a2d2f;
+    --separator: #2a2d2f;
+    --accent: #00dfa2;
+    --accent-foreground: #000000;
+    --success: #1fd18c;
+    --success-foreground: #000000;
+    --warning: #e6a11b;
+    --warning-foreground: var(--eclipse);
+    --danger: #e25555;
+    --danger-foreground: #ffffff;
   }
 }
 
@@ -17,7 +57,7 @@
   /* LIGHT – emerald paper */
   .texture-emerald {
     /* base from HeroUI theme */
-    background-color: hsl(var(--heroui-background)) !important;
+    background-color: var(--background) !important;
 
     background-image:
       /* soft emerald glow top-left */
@@ -62,7 +102,7 @@
 
   /* DARK – graphite with emerald accent */
   .dark .texture-emerald {
-    background-color: hsl(var(--heroui-background)) !important;
+    background-color: var(--background) !important;
 
     background-image:
       /* emerald glow top-left */

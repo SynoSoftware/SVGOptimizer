@@ -1,6 +1,7 @@
-import { HeroUIProvider } from "@heroui/react";
 import { Suspense, lazy } from "react";
 import SvgOptimizer from "./pages/SvgOptimizer";
+import { useColorMode } from "./hooks/useColorMode";
+import SiteHeader from "./components/SiteHeader";
 
 // Development only: the import sits in a branch Vite folds away for the
 // production build, so neither the page nor its fixtures ship.
@@ -16,20 +17,22 @@ const isSelfTest = () =>
 
 export default function App() {
   const selfTest = Boolean(OptimizerSelfTest) && isSelfTest();
+  // HeroUI 3 has no provider. The theme is the `dark` class on <html>, which
+  // this hook owns, and every component reads the CSS variables under it.
+  const { mode, toggle } = useColorMode();
 
   return (
-    <HeroUIProvider>
-      <div className="min-h-screen flex flex-col bg-background text-foreground texture-emerald">
-        <main className="flex-1">
-          <Suspense fallback={null}>
-            {selfTest && OptimizerSelfTest ? (
-              <OptimizerSelfTest />
-            ) : (
-              <SvgOptimizer />
-            )}
-          </Suspense>
-        </main>
-      </div>
-    </HeroUIProvider>
+    <div className="min-h-screen flex flex-col bg-background text-foreground texture-emerald">
+      <SiteHeader mode={mode} onToggleTheme={toggle} />
+      <main className="flex-1">
+        <Suspense fallback={null}>
+          {selfTest && OptimizerSelfTest ? (
+            <OptimizerSelfTest />
+          ) : (
+            <SvgOptimizer />
+          )}
+        </Suspense>
+      </main>
+    </div>
   );
 }

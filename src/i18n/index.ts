@@ -1,20 +1,21 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "./en.json";
-import es from "./es.json";
 import nl from "./nl.json";
-import zh from "./zh.json";
 
 export const resources = {
   en: { translation: en },
-  es: { translation: es },
   nl: { translation: nl },
-  zh: { translation: zh },
 } as const;
 
 export type SupportedLanguage = keyof typeof resources;
 
-const supportedLanguages = Object.keys(resources) as SupportedLanguage[];
+/** Order shown in the language menu. */
+export const SUPPORTED_LANGUAGES = Object.keys(
+  resources
+) as SupportedLanguage[];
+
+const supportedLanguages = SUPPORTED_LANGUAGES;
 
 const normalize = (lang?: string | null): SupportedLanguage | null => {
   if (!lang) return null;

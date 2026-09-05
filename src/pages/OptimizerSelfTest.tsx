@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, Chip, Progress } from "@heroui/react";
+import { Button, Card, CardContent, Chip, ProgressBar } from "@heroui/react";
 import { useState } from "react";
 import Container from "../components/Container";
 import { FIXTURES } from "../dev/optimizerFixtures";
@@ -62,11 +62,11 @@ export default function OptimizerSelfTest() {
         </div>
         <div className="flex gap-2">
           {report && (
-            <Button variant="flat" onPress={copyBaseline}>
+            <Button variant="secondary" onPress={copyBaseline}>
               {copied ? "Copied" : "Copy baseline"}
             </Button>
           )}
-          <Button color="primary" onPress={run} isLoading={running}>
+          <Button variant="primary" onPress={run} isDisabled={running}>
             {running ? "Running" : "Run"}
           </Button>
         </div>
@@ -74,7 +74,7 @@ export default function OptimizerSelfTest() {
 
       {running && (
         <div className="mb-6">
-          <Progress
+          <ProgressBar
             aria-label="progress"
             value={(100 * progress.done) / progress.total}
           />
@@ -84,17 +84,17 @@ export default function OptimizerSelfTest() {
 
       {report && (
         <Card>
-          <CardBody className="overflow-x-auto">
+          <CardContent className="overflow-x-auto">
             <div className="flex gap-2 mb-4 flex-wrap">
-              <Chip color={report.failed ? "danger" : "success"} variant="flat">
+              <Chip color={report.failed ? "danger" : "success"} variant="soft">
                 {report.passed} passed, {report.failed} failed
               </Chip>
               {report.drifted > 0 && (
-                <Chip color="warning" variant="flat">
+                <Chip color="warning" variant="soft">
                   {report.drifted} drifted from the baseline
                 </Chip>
               )}
-              <Chip variant="flat">{report.ms} ms</Chip>
+              <Chip variant="soft">{report.ms} ms</Chip>
             </div>
             <table className="text-xs font-mono w-full">
               <thead className="text-foreground/50 text-left">
@@ -153,7 +153,7 @@ export default function OptimizerSelfTest() {
                 ))}
               </tbody>
             </table>
-          </CardBody>
+          </CardContent>
         </Card>
       )}
 

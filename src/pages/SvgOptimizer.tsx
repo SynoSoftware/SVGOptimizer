@@ -1,30 +1,28 @@
 import {
-  Accordion,
-  AccordionItem,
   Button,
   ButtonGroup,
   Card,
-  CardBody,
+  CardContent,
   CardFooter,
   CardHeader,
   Checkbox,
   Chip,
-  Divider,
+  Label,
+  Separator,
   Modal,
   ModalBody,
-  ModalContent,
-  Progress,
+  ModalDialog,
+  ProgressBar,
   Slider,
   Switch,
-  Tab,
   Tabs,
-  Tooltip,
   cn,
 } from "@heroui/react";
 import {
   AlertCircle,
   ArrowRight,
   Check,
+  ChevronDown,
   Copy,
   FileDown,
   GripVertical,
@@ -38,7 +36,6 @@ import {
   Plus,
   Replace,
   Scissors,
-  Settings,
   Settings2,
   Timer,
   Trash2,
@@ -48,6 +45,7 @@ import {
 import { useEffect, useRef, useState, type MouseEvent, type WheelEvent } from "react";
 import { useTranslation } from "react-i18next";
 import Container from "../components/Container";
+import Hint from "../components/Hint";
 
 // --- WORLD CLASS LIBRARIES ---
 import { AnimatePresence, Reorder, useDragControls } from "framer-motion";
@@ -84,28 +82,28 @@ const ALGORITHM_CONFIG = {
   crop: {
     label: "Geometry",
     icon: Layers,
-    color: "primary",
+    accentClass: "text-accent",
     desc: "Standard vector boolean cuts",
     defaults: DEFAULT_CROP_OPTIONS,
   },
   fastcrop: {
     label: "Fast Crop",
     icon: Zap,
-    color: "warning",
+    accentClass: "text-amber-500",
     desc: "Vector boolean cuts, looser size guards",
     defaults: DEFAULT_FASTCROP_OPTIONS,
   },
   raster: {
     label: "Raster",
     icon: ImageIcon,
-    color: "secondary",
+    accentClass: "text-sky-500",
     desc: "Canvas coverage test, drops hidden shapes",
     defaults: DEFAULT_RASTER_OPTIONS,
   },
   scissor: {
     label: "Scissor",
     icon: Scissors,
-    color: "cyan",
+    accentClass: "text-violet-500",
     desc: "Occlusion-based removal",
     defaults: { resolution: 1024, sensitivity: 0.5 },
   },
@@ -237,14 +235,18 @@ function SettingSlider({ label, value, min, max, step, formatValue, onChange, su
       </div>
       <Slider
         aria-label={label}
-        size="sm"
         minValue={min}
         maxValue={max}
         step={step}
         value={value}
         onChange={(v) => typeof v === "number" && onChange(v)}
         className="opacity-90 hover:opacity-100"
-      />
+      >
+        <Slider.Track>
+          <Slider.Fill />
+          <Slider.Thumb />
+        </Slider.Track>
+      </Slider>
     </div>
   );
 }
@@ -279,11 +281,21 @@ function StepSettings({ type, options, onChange }: { type: ProcessorType; option
             </div>
           </div>
           <div className="flex gap-4">
-            <Checkbox size="sm" isSelected={options.enableBooleanCuts} onValueChange={(v) => onChange("enableBooleanCuts", v)}>
-              {t("optimizer.pipeline.settings.fields.boolean")}
+            <Checkbox isSelected={options.enableBooleanCuts} onChange={(v: boolean) => onChange("enableBooleanCuts", v)}>
+              <Checkbox.Content>
+                <Checkbox.Control>
+                  <Checkbox.Indicator />
+                </Checkbox.Control>
+                <Label>{t("optimizer.pipeline.settings.fields.boolean")}</Label>
+              </Checkbox.Content>
             </Checkbox>
-            <Checkbox size="sm" isSelected={options.enableTraps} onValueChange={(v) => onChange("enableTraps", v)}>
-              {t("optimizer.pipeline.settings.fields.traps")}
+            <Checkbox isSelected={options.enableTraps} onChange={(v: boolean) => onChange("enableTraps", v)}>
+              <Checkbox.Content>
+                <Checkbox.Control>
+                  <Checkbox.Indicator />
+                </Checkbox.Control>
+                <Label>{t("optimizer.pipeline.settings.fields.traps")}</Label>
+              </Checkbox.Content>
             </Checkbox>
           </div>
         </div>
@@ -435,36 +447,36 @@ function ComparePreview({ original, optimized, className, isFullScreen, onToggle
         "group relative flex w-full overflow-hidden bg-[url('https://heroui.com/images/grid.svg')] bg-center select-none touch-none",
         isPanning ? "cursor-grabbing" : "cursor-col-resize",
         "sm:p-8 p-2",
-        className || "h-[400px] rounded-xl border border-default-200"
+        className || "h-[400px] rounded-xl border border-border"
       )}
     >
       {/* Toolbar */}
       <div className="no-pan absolute right-3 top-3 z-30 flex items-center gap-2">
-        <ButtonGroup size="sm" className="border border-default-200 bg-background/60 shadow-sm backdrop-blur-md">
-          <Tooltip content={t("optimizer.preview.zoomOut")}>
+        <ButtonGroup size="sm" className="border border-border bg-background/60 shadow-sm backdrop-blur-md">
+          <Hint content={t("optimizer.preview.zoomOut")}>
             <Button isIconOnly onPress={zoomOut}>
               <Minus size={14} />
             </Button>
-          </Tooltip>
-          <Tooltip content={t("optimizer.preview.resetView")}>
+          </Hint>
+          <Hint content={t("optimizer.preview.resetView")}>
             <Button isIconOnly onPress={resetView} className="px-3 font-mono text-xs">
               {Math.round(transform.k * 100)}%
             </Button>
-          </Tooltip>
-          <Tooltip content={t("optimizer.preview.zoomIn")}>
+          </Hint>
+          <Hint content={t("optimizer.preview.zoomIn")}>
             <Button isIconOnly onPress={zoomIn}>
               <Plus size={14} />
             </Button>
-          </Tooltip>
+          </Hint>
         </ButtonGroup>
         {onToggleFullScreen && (
-          <Button isIconOnly size="sm" variant="flat" color="primary" onPress={onToggleFullScreen} className="bg-primary/10 backdrop-blur-md">
+          <Button isIconOnly variant="secondary" onPress={onToggleFullScreen} className="bg-accent/10 backdrop-blur-md">
             {isFullScreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
           </Button>
         )}
       </div>
 
-      <div className="pointer-events-none absolute left-3 top-3 z-30 flex gap-4 rounded-lg border border-default-200 bg-background/60 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest backdrop-blur-md">
+      <div className="pointer-events-none absolute left-3 top-3 z-30 flex gap-4 rounded-lg border border-border bg-background/60 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest backdrop-blur-md">
         <span className="text-foreground/60">{t("optimizer.preview.original")}</span>
         <span className="text-success">{t("optimizer.preview.optimized")}</span>
       </div>
@@ -481,7 +493,7 @@ function ComparePreview({ original, optimized, className, isFullScreen, onToggle
         </div>
       </div>
       <div
-        className="absolute inset-0 flex items-center justify-center border-r-2 border-primary bg-transparent p-8"
+        className="absolute inset-0 flex items-center justify-center border-r-2 border-accent bg-transparent p-8"
         style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
       >
         <div
@@ -496,7 +508,7 @@ function ComparePreview({ original, optimized, className, isFullScreen, onToggle
 
       {/* Handle */}
       <div className="absolute inset-y-0 z-20 w-0.5 bg-transparent" style={{ left: `${sliderPosition}%` }}>
-        <div className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-primary p-1.5 text-white shadow-xl transition-transform group-hover:scale-110">
+        <div className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-accent p-1.5 text-accent-foreground shadow-xl transition-transform group-hover:scale-110">
           <MoveHorizontal size={12} />
         </div>
       </div>
@@ -508,6 +520,10 @@ function ComparePreview({ original, optimized, className, isFullScreen, onToggle
 const PipelineStepItem = ({ step, config, updateStepOption, toggleStepActive, removeStep, t }: any) => {
   const dragControls = useDragControls();
   const Icon = config.icon;
+  // The settings used to hang off an Accordion, which insisted on its own
+  // full-width trigger row. That doubled the height of every step for a
+  // chevron, so the disclosure now sits with the other controls.
+  const [showSettings, setShowSettings] = useState(false);
 
   return (
     <Reorder.Item
@@ -524,19 +540,19 @@ const PipelineStepItem = ({ step, config, updateStepOption, toggleStepActive, re
       exit={{ opacity: 0, scale: 0.9, height: 0, margin: 0 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
       className={cn(
-        "group relative overflow-hidden rounded-xl border bg-content1 shadow-sm transition-colors shrink-0",
-        step.active ? "border-default-200" : "border-default-100 opacity-60 grayscale"
+        "group relative overflow-hidden rounded-xl border bg-surface shadow-sm transition-colors shrink-0",
+        step.active ? "border-border" : "border-separator opacity-60 grayscale"
       )}
     >
       <div className="flex items-center gap-2 p-2">
         <div
-          className="cursor-grab touch-none p-2 text-default-300 hover:text-foreground active:cursor-grabbing active:text-primary"
+          className="cursor-grab touch-none p-2 text-muted hover:text-foreground active:cursor-grabbing active:text-accent"
           onPointerDown={(e) => dragControls.start(e)}
         >
           <GripVertical size={16} />
         </div>
 
-        <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-default-100", `text-${config.color}-500`)}>
+        <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface-tertiary", config.accentClass)}>
           <Icon size={16} />
         </div>
         <div className="flex-1 min-w-0">
@@ -546,37 +562,37 @@ const PipelineStepItem = ({ step, config, updateStepOption, toggleStepActive, re
         </div>
         <div className="flex items-center gap-1">
           <Switch
-            size="sm"
             isSelected={step.active}
-            onValueChange={() => toggleStepActive(step.id)}
+            onChange={() => toggleStepActive(step.id)}
             aria-label={t("optimizer.pipeline.settings.toggleLabel")}
             className="scale-75"
-          />
-          <Button isIconOnly size="sm" color="danger" variant="light" className="min-w-8 w-8 h-8" onPress={() => removeStep(step.id)}>
+          >
+            <Switch.Content>
+              <Switch.Control>
+                <Switch.Thumb />
+              </Switch.Control>
+            </Switch.Content>
+          </Switch>
+          <Button
+            isIconOnly
+            variant="ghost"
+            className="min-w-8 w-8 h-8"
+            aria-label={t("optimizer.pipeline.settings.configure")}
+            aria-expanded={showSettings}
+            isDisabled={!step.active}
+            onPress={() => setShowSettings((v) => !v)}
+          >
+            <ChevronDown size={14} className={cn("transition-transform", showSettings && "rotate-180")} />
+          </Button>
+          <Button isIconOnly variant="danger-soft" className="min-w-8 w-8 h-8" onPress={() => removeStep(step.id)}>
             <Trash2 size={14} />
           </Button>
         </div>
       </div>
 
-      {step.active && (
-        <div className="border-t border-default-100/50 bg-default-50/30">
-          <Accordion isCompact>
-            <AccordionItem
-              title={
-                <div className="flex items-center gap-1 text-[10px] uppercase font-bold text-foreground/40">
-                  <Settings size={10} />
-                  <span>{t("optimizer.pipeline.settings.configure")}</span>
-                </div>
-              }
-              classNames={{
-                trigger: "py-2 px-3 min-h-0",
-                content: "py-0 pb-3",
-                indicator: "text-foreground/40 scale-75",
-              }}
-            >
-              <StepSettings type={step.type} options={step.options} onChange={(k: string, v: any) => updateStepOption(step.id, k, v)} />
-            </AccordionItem>
-          </Accordion>
+      {step.active && showSettings && (
+        <div className="border-t border-separator/50 bg-surface-secondary/30 px-3 py-3">
+          <StepSettings type={step.type} options={step.options} onChange={(k: string, v: any) => updateStepOption(step.id, k, v)} />
         </div>
       )}
     </Reorder.Item>
@@ -743,22 +759,24 @@ export default function SvgOptimizerPage() {
   return (
     <section className="w-full py-8">
       <Container>
-        <Modal isOpen={isFullScreen} onOpenChange={setIsFullScreen} size="full" hideCloseButton classNames={{ base: "bg-background" }}>
-          <ModalContent>
-            {(onClose) => (
+        {/* v3 modals take isOpen via the root and wrap the dialog in a
+            container; the close callback is no longer passed as a child. */}
+        <Modal isOpen={isFullScreen} onOpenChange={setIsFullScreen}>
+          <Modal.Container>
+            <ModalDialog className="bg-background">
               <ModalBody className="p-0">
                 {result && (
                   <ComparePreview
                     original={source}
                     optimized={result.svg}
                     isFullScreen={true}
-                    onToggleFullScreen={onClose}
+                    onToggleFullScreen={() => setIsFullScreen(false)}
                     className="h-screen w-screen rounded-none border-none"
                   />
                 )}
               </ModalBody>
-            )}
-          </ModalContent>
+            </ModalDialog>
+          </Modal.Container>
         </Modal>
 
         <div className="mb-8 flex flex-col items-center text-center">
@@ -770,7 +788,6 @@ export default function SvgOptimizerPage() {
           {/* LEFT: Builder */}
           <div className="flex flex-col gap-6 lg:col-span-5">
             <Card
-              isPressable={!source}
               onDragOver={(e) => {
                 e.preventDefault();
                 setIsDragging(true);
@@ -789,13 +806,13 @@ export default function SvgOptimizerPage() {
               className={cn(
                 "shrink-0 border-2 border-dashed transition-all",
                 isDragging
-                  ? "border-primary bg-primary/10 scale-[1.01]"
+                  ? "border-accent bg-accent/10 scale-[1.01]"
                   : source
                     ? "border-success/50 bg-success/5"
-                    : "border-default-200 hover:border-primary/50 active:scale-[0.99]"
+                    : "border-border hover:border-accent/50 active:scale-[0.99]"
               )}
             >
-              <CardBody className="cursor-pointer flex-col items-center justify-center p-6 text-center" onClick={() => fileInputRef.current?.click()}>
+              <CardContent className="cursor-pointer flex-col items-center justify-center p-6 text-center" onClick={() => fileInputRef.current?.click()}>
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -808,20 +825,20 @@ export default function SvgOptimizerPage() {
                   }}
                 />
                 <Upload
-                  className={cn("mb-2 transition-colors", isDragging ? "text-primary scale-110" : source ? "text-success" : "text-default-400")}
+                  className={cn("mb-2 transition-colors", isDragging ? "text-accent scale-110" : source ? "text-success" : "text-muted")}
                 />
-                <p className={cn("text-sm font-medium", isDragging && "text-primary")}>
+                <p className={cn("text-sm font-medium", isDragging && "text-accent")}>
                   {isDragging ? "Drop SVG here" : loadedFileName || t("optimizer.pipeline.upload.cta")}
                 </p>
                 {source && !isDragging && <p className="mt-1 text-xs text-foreground/50">{formatBytes(new Blob([source]).size)}</p>}
-              </CardBody>
+              </CardContent>
             </Card>
-            <Card className="flex max-h-[80vh] flex-col border border-default-200">
-              <CardHeader className="shrink-0 flex-col gap-2 px-4 py-4 bg-content1/50 backdrop-blur-sm z-10">
+            <Card className="flex max-h-[80vh] flex-col border border-border">
+              <CardHeader className="shrink-0 flex-col gap-2 px-4 py-4 bg-surface/50 backdrop-blur-sm z-10">
                 <div className="flex w-full items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold uppercase tracking-wider text-foreground/60">{t("optimizer.pipeline.panel.title")}</span>
-                    <Chip size="sm" variant="flat" className="h-5 min-h-0 px-1 text-[10px]">
+                    <Chip variant="soft" className="h-5 min-h-0 px-1 text-[10px]">
                       {pipeline.length}
                     </Chip>
                   </div>
@@ -830,13 +847,13 @@ export default function SvgOptimizerPage() {
 
                 {/* --- FIX 1: ALGORITHM BUTTON GRID --- */}
                 {/* Mobile: 2x2 Grid (Big Squares). Desktop: 4x1 Row. */}
-                <div className="grid w-full grid-cols-2 sm:grid-cols-4 gap-2">
+                <div className="grid w-full grid-cols-2 gap-2">
                   {(Object.entries(ALGORITHM_CONFIG) as [ProcessorType, any][]).map(([key, config]) => {
                     const Icon = config.icon;
                     const labelKey = `optimizer.pipeline.settings.algorithms.${key}.label`;
                     const descKey = `optimizer.pipeline.settings.algorithms.${key}.description`;
                     return (
-                      <Tooltip
+                      <Hint
                         key={key}
                         content={
                           <div className="px-1 py-1 text-center">
@@ -847,40 +864,30 @@ export default function SvgOptimizerPage() {
                         delay={600}
                         closeDelay={0}
                       >
-                        <button
-                          onClick={() => addStep(key)}
+                        <Button
+                          variant="tertiary"
+                          onPress={() => addStep(key)}
                           className={cn(
-                            "group relative flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-2",
-                            "rounded-xl border border-default-200 bg-content1 transition-all duration-200",
-                            "hover:border-primary/50 hover:bg-default-50 hover:shadow-md active:scale-95",
-                            // Layout Logic: Square mobile, linear desktop
-                            "aspect-[1.2/1] sm:aspect-auto sm:h-10 sm:justify-start sm:px-3 py-3 sm:py-0"
+                            "group h-9 w-full min-w-0 flex items-center justify-start gap-2 px-2.5",
+                            "rounded-lg border border-border bg-surface transition-colors",
+                            "hover:border-accent/50 hover:bg-surface-secondary active:scale-95"
                           )}
                         >
-                          <div
-                            className={cn(
-                              "flex shrink-0 items-center justify-center rounded-lg bg-default-100 transition-colors group-hover:bg-primary/10 group-hover:text-primary",
-                              // Icon Size Logic: Bigger on mobile
-                              "h-9 w-9 sm:h-5 sm:w-5",
-                              `text-${config.color}-500`
-                            )}
-                          >
-                            <Icon className="w-5 h-5 sm:w-3 sm:h-3" strokeWidth={2.5} />
-                          </div>
-                          <span className="text-[10px] sm:text-[9px] font-bold uppercase tracking-widest text-foreground/70 sm:truncate">
+                          <Icon size={14} strokeWidth={2.5} className={cn("shrink-0", config.accentClass)} />
+                          <span className="truncate text-[10px] font-bold uppercase tracking-wide text-foreground/70">
                             {t(labelKey, { defaultValue: config.label })}
                           </span>
-                        </button>
-                      </Tooltip>
+                        </Button>
+                      </Hint>
                     );
                   })}
                 </div>
               </CardHeader>
 
-              <Divider className="opacity-50" />
+              <Separator className="opacity-50" />
 
               {/* PIPELINE LIST */}
-              <CardBody className="flex-1 overflow-y-auto overflow-x-hidden p-3 bg-default-50/30">
+              <CardContent className="flex-1 overflow-y-auto overflow-x-hidden p-3 bg-surface-secondary/30">
                 {pipeline.length === 0 && (
                   <div className="flex h-full flex-col items-center justify-center text-center text-sm text-foreground/40 min-h-[150px]">
                     <Layers size={32} className="mb-2 opacity-20" />
@@ -905,9 +912,9 @@ export default function SvgOptimizerPage() {
                     ))}
                   </AnimatePresence>
                 </Reorder.Group>
-              </CardBody>
+              </CardContent>
 
-              <CardFooter className="shrink-0 flex-col gap-3 p-3 pt-0 bg-default-50/30 border-t border-default-100/50">
+              <CardFooter className="shrink-0 flex-col gap-3 p-3 pt-0 bg-surface-secondary/30 border-t border-separator/50">
                 {pipelineError && (
                   <div className="mt-3 flex w-full items-center gap-2 rounded-lg border border-danger/20 bg-danger/10 p-2 text-xs text-danger">
                     <AlertCircle size={14} />
@@ -915,15 +922,14 @@ export default function SvgOptimizerPage() {
                   </div>
                 )}
                 {isRunning && (
-                  <div className="flex w-full flex-col gap-1 rounded-xl border border-default-100/70 bg-background/40 p-3 shadow-sm">
+                  <div className="flex w-full flex-col gap-1 rounded-xl border border-separator/70 bg-background/40 p-3 shadow-sm">
                     <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-foreground/50">
                       <span>{t("optimizer.form.progressLabel")}</span>
                       <span className="font-mono text-foreground">{Math.max(0, Math.min(100, Math.round(progress)))}%</span>
                     </div>
-                    <Progress
+                    <ProgressBar
                       size="sm"
                       value={progress}
-                      color="primary"
                       aria-label={t("optimizer.form.progressLabel")}
                       isIndeterminate={progress === 0}
                     />
@@ -931,14 +937,12 @@ export default function SvgOptimizerPage() {
                 )}
 
                 <Button
-                  className="w-full font-bold shadow-md shadow-primary/20 mt-3"
-                  color="primary"
-                  size="md"
+                  variant="primary"
+                  className="w-full font-bold shadow-md shadow-accent/20 mt-3"
                   onPress={runPipeline}
-                  isLoading={isRunning}
-                  startContent={!isRunning && <Play size={16} fill="currentColor" />}
-                  isDisabled={!source || pipeline.filter((p) => p.active).length === 0}
+                  isDisabled={isRunning || !source || pipeline.filter((p) => p.active).length === 0}
                 >
+                  {!isRunning && <Play size={16} fill="currentColor" className="mr-2" />}
                   {isRunning ? t("optimizer.pipeline.buttons.running") : t("optimizer.pipeline.buttons.run")}
                 </Button>
               </CardFooter>
@@ -948,15 +952,15 @@ export default function SvgOptimizerPage() {
           {/* RIGHT: Results */}
           <div className="flex flex-col gap-6 lg:col-span-7 lg:sticky lg:top-6">
             {!result ? (
-              <div className="flex min-h-[500px] flex-col items-center justify-center rounded-3xl border border-dashed border-default-200 bg-content1/30 p-8 text-center text-foreground/40">
-                <div className="mb-4 rounded-full bg-default-100 p-6">
+              <div className="flex min-h-[500px] flex-col items-center justify-center rounded-3xl border border-dashed border-border bg-surface/30 p-8 text-center text-foreground/40">
+                <div className="mb-4 rounded-full bg-surface-tertiary p-6">
                   <Settings2 size={40} />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground">{t("optimizer.pipeline.results.readyTitle")}</h3>
                 <p className="text-sm">{t("optimizer.pipeline.results.readyBody")}</p>
               </div>
             ) : (
-              <Card className="border border-default-200 shadow-md">
+              <Card className="border border-border shadow-md">
                 <CardHeader className="flex flex-col sm:flex-row sm:justify-between gap-4 px-6 py-4">
                   <div className="flex flex-col">
                     <p className="text-xs font-bold uppercase text-foreground/50">{t("optimizer.pipeline.results.finalSize")}</p>
@@ -964,7 +968,8 @@ export default function SvgOptimizerPage() {
                     <div className="flex items-baseline gap-2">
                       <span className="text-2xl font-bold">{formatBytes(new Blob([result.svg]).size)}</span>
 
-                      <Chip size="sm" color="success" variant="flat" startContent={<Check size={12} />}>
+                      <Chip color="success" variant="soft">
+                        <Check size={12} className="mr-1 inline" aria-hidden />
                         {t("optimizer.pipeline.results.saved", {
                           percent: totalSavingsPercent.toFixed(1),
                         })}
@@ -973,24 +978,18 @@ export default function SvgOptimizerPage() {
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                    <Tooltip content={t("optimizer.pipeline.tooltips.moveOptimizedToSource")}>
+                    <Hint content={t("optimizer.pipeline.tooltips.moveOptimizedToSource")}>
                       <Button
-                        size="sm"
-                        variant="flat"
-                        color="secondary"
+                        variant="secondary"
                         onPress={handleUseAsSource}
-                        startContent={<Replace size={16} />}
                         className="w-full sm:w-auto"
                       >
                         {t("optimizer.pipeline.tooltips.useAsSource")}
                       </Button>
-                    </Tooltip>
+                    </Hint>
 
                     <Button
-                      size="sm"
-                      variant="shadow"
-                      color="success"
-                      startContent={<FileDown size={16} />}
+                      variant="primary"
                       onPress={() => {
                         const blob = new Blob([result.svg], {
                           type: "image/svg+xml",
@@ -1003,26 +1002,32 @@ export default function SvgOptimizerPage() {
                       }}
                       className="w-full sm:w-auto"
                     >
+                      <FileDown size={16} className="mr-2" aria-hidden />
                       {t("optimizer.pipeline.tooltips.download")}
                     </Button>
                   </div>
                 </CardHeader>
 
-                <Divider />
+                <Separator />
 
-                <CardBody className="p-0">
-                  <Tabs aria-label={t("optimizer.pipeline.tabs.resultsLabel")} variant="underlined" classNames={{ tabList: "px-4", panel: "p-0" }}>
-                    <Tab key="preview" title={t("optimizer.pipeline.tabs.preview")}>
+                <CardContent className="p-0">
+                  <Tabs aria-label={t("optimizer.pipeline.tabs.resultsLabel")} variant="secondary">
+                    <Tabs.List>
+                      <Tabs.Tab id="preview">{t("optimizer.pipeline.tabs.preview")}</Tabs.Tab>
+                      <Tabs.Tab id="code">{t("optimizer.pipeline.tabs.code")}</Tabs.Tab>
+                      <Tabs.Tab id="history">{t("optimizer.pipeline.tabs.history")}</Tabs.Tab>
+                    </Tabs.List>
+                    <Tabs.Panel id="preview">
                       <ComparePreview original={source} optimized={result.svg} onToggleFullScreen={() => setIsFullScreen(true)} />
-                    </Tab>
+                    </Tabs.Panel>
 
                     {/* --- FIX 3: SYNTAX HIGHLIGHTING (Horizontal Scroll restored) --- */}
-                    <Tab key="code" title={t("optimizer.pipeline.tabs.code")}>
-                      <div className="relative border-b border-default-200 bg-[#1e1e1e] w-full">
+                    <Tabs.Panel id="code">
+                      <div className="relative border-b border-border bg-[#1e1e1e] w-full">
                         <Button
                           isIconOnly
                           size="sm"
-                          variant="light"
+                          variant="ghost"
                           className="absolute right-2 top-2 z-20 text-white/60 hover:text-white bg-white/5 hover:bg-white/10"
                           onPress={() => navigator.clipboard.writeText(result.svg)}
                         >
@@ -1035,12 +1040,12 @@ export default function SvgOptimizerPage() {
                           </pre>
                         </div>
                       </div>
-                    </Tab>
+                    </Tabs.Panel>
 
-                    <Tab key="history" title={t("optimizer.pipeline.tabs.history")}>
-                      <div className="flex flex-col rounded-xl border border-default-200 bg-content1 shadow-sm overflow-hidden m-4">
+                    <Tabs.Panel id="history">
+                      <div className="flex flex-col rounded-xl border border-border bg-surface shadow-sm overflow-hidden m-4">
                         {/* 1. Compact Summary Header */}
-                        <div className="flex items-center justify-between bg-default-100/80 px-4 py-3 text-xs font-medium border-b border-default-200">
+                        <div className="flex items-center justify-between bg-surface-tertiary/80 px-4 py-3 text-xs font-medium border-b border-border">
                           {/* LEFT: Data Flow (Original -> Result) */}
                           <div className="flex items-center gap-4">
                             <div className="flex flex-col">
@@ -1056,20 +1061,20 @@ export default function SvgOptimizerPage() {
 
                           {/* RIGHT: Stats + Copy Button (Aligned with steps) */}
                           <div className="flex items-center gap-3">
-                            <div className="hidden sm:flex items-center gap-1.5 rounded-md bg-background/50 px-2 py-1 border border-default-200">
+                            <div className="hidden sm:flex items-center gap-1.5 rounded-md bg-background/50 px-2 py-1 border border-border">
                               <Timer size={12} className="text-foreground/50" />
                               <span className="font-mono">{formatDurationReadable(result.totalRuntimeMs || 0, t)}</span>
                             </div>
-                            <Chip size="sm" color="success" variant="solid" classNames={{ content: "font-bold" }}>
+                            <Chip color="success" variant="primary" className="font-bold">
                               {totalSavingsPercent > 0 ? `-${totalSavingsPercent.toFixed(1)}%` : "0%"}
                             </Chip>
 
                             {/* --- BUTTON MOVED HERE --- */}
-                            <Tooltip content="Copy original structure">
+                            <Hint content="Copy original structure">
                               <Button
                                 isIconOnly
                                 size="sm"
-                                variant="light"
+                                variant="ghost"
                                 className="text-foreground/40 hover:text-foreground"
                                 onPress={() => {
                                   const parsed = generateDebugStructure(source, undefined, t("optimizer.pipeline.debug.parseError"));
@@ -1078,14 +1083,14 @@ export default function SvgOptimizerPage() {
                               >
                                 <Copy size={14} />
                               </Button>
-                            </Tooltip>
+                            </Hint>
                           </div>
                         </div>
 
                         {/* 2. The Connected Steps List */}
                         <div className="relative flex flex-col bg-background/40">
                           {/* Vertical connector line */}
-                          <div className="absolute left-6 top-4 bottom-4 w-px bg-default-200 z-0" />
+                          <div className="absolute left-6 top-4 bottom-4 w-px bg-surface-tertiary z-0" />
 
                           {result.history
                             .filter((entry) => !entry.isOriginal)
@@ -1098,10 +1103,10 @@ export default function SvgOptimizerPage() {
                               return (
                                 <div
                                   key={`${entry.label}-${i}`}
-                                  className="relative z-10 flex items-center gap-4 border-b border-default-100/50 p-3 px-4 last:border-none hover:bg-default-50 transition-colors group"
+                                  className="relative z-10 flex items-center gap-4 border-b border-separator/50 p-3 px-4 last:border-none hover:bg-surface-secondary transition-colors group"
                                 >
                                   {/* Index Badge */}
-                                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white shadow-sm ring-4 ring-background">
+                                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground shadow-sm ring-4 ring-background">
                                     {i + 1}
                                   </div>
 
@@ -1140,11 +1145,11 @@ export default function SvgOptimizerPage() {
                                   </div>
 
                                   {/* Action: Copy Step Button */}
-                                  <Tooltip content="Copy structure for debugging">
+                                  <Hint content="Copy structure for debugging">
                                     <Button
                                       isIconOnly
                                       size="sm"
-                                      variant="light"
+                                      variant="ghost"
                                       className="text-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity"
                                       onPress={() => {
                                         const parsed = generateDebugStructure(entry.svg, undefined, t("optimizer.pipeline.debug.parseError"));
@@ -1153,15 +1158,15 @@ export default function SvgOptimizerPage() {
                                     >
                                       <Copy size={14} />
                                     </Button>
-                                  </Tooltip>
+                                  </Hint>
                                 </div>
                               );
                             })}
                         </div>
                       </div>
-                    </Tab>
+                    </Tabs.Panel>
                   </Tabs>
-                </CardBody>
+                </CardContent>
               </Card>
             )}
           </div>
