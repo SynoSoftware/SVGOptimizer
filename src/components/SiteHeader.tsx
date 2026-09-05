@@ -59,7 +59,10 @@ export default function SiteHeader({ mode, onToggleTheme }: Props) {
             >
               <LanguagesIcon className="h-5 w-5" aria-hidden />
             </DropdownTrigger>
-            <DropdownPopover>
+            {/* md:min-w-40 overrides HeroUI's md:min-w-55 default: 220px is
+                sized for menus with icons and description lines, and two
+                language names need about 70px. Matches synosoft.sr's navbar. */}
+            <DropdownPopover className="md:min-w-40">
               <DropdownMenu
                 aria-label={t("common.language.label")}
                 selectedKeys={[active]}
