@@ -119,25 +119,6 @@ export const BASELINE: Baseline = {
     "digest": "d5622d9ff11c4b1b",
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><linearGradient id=\"g\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#f00\"/><stop offset=\"1\" stop-color=\"#00f\"/></linearGradient></defs><rect x=\"5\" y=\"5\" width=\"90\" height=\"90\" fill=\"url(#g)\"/><circle cx=\"50\" cy=\"50\" r=\"20\" fill=\"#fff\"/></svg>"
   },
-  "gradient/fastcrop": {
-    "raw": 322,
-    "gzip": 219,
-    "stats": {
-      "initialBytes": 322,
-      "optimizedBytes": 322,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 0,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 1
-    },
-    "digest": "d5622d9ff11c4b1b",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><linearGradient id=\"g\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#f00\"/><stop offset=\"1\" stop-color=\"#00f\"/></linearGradient></defs><rect x=\"5\" y=\"5\" width=\"90\" height=\"90\" fill=\"url(#g)\"/><circle cx=\"50\" cy=\"50\" r=\"20\" fill=\"#fff\"/></svg>"
-  },
   "gradient/raster": {
     "raw": 346,
     "gzip": 240,
@@ -172,25 +153,6 @@ export const BASELINE: Baseline = {
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><defs xmlns=\"http://www.w3.org/2000/svg\"><linearGradient id=\"g\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#f00\"/><stop offset=\"1\" stop-color=\"#00f\"/></linearGradient></defs><path d=\"M5 95V5h90v90z\" id=\"sp0\" fill=\"url(#g)\" /><path d=\"M30 50C30 38.954 38.954 30 50 30s20 8.954 20 20S61.046 70 50 70S30 61.046 30 50z\" fill=\"#ffffff\" /></svg>"
   },
   "polygon/crop": {
-    "raw": 173,
-    "gzip": 155,
-    "stats": {
-      "initialBytes": 196,
-      "optimizedBytes": 173,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 1,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 0
-    },
-    "digest": "6fa43faa2fc0216a",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M50 5l45 90H5z\" fill=\"#2b7\"/><path d=\"M10 10h80v20\" fill=\"none\" stroke=\"#111\" stroke-width=\"4\"/></svg>"
-  },
-  "polygon/fastcrop": {
     "raw": 173,
     "gzip": 155,
     "stats": {
@@ -261,25 +223,6 @@ export const BASELINE: Baseline = {
     "digest": "bf7f562f30bddccd",
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1024 1024\"><path d=\"M512 100c288 0 388 200 388 412S800 924 512 924S124 724 124 512S224 100 512 100z\" fill=\"#3366cc\"/><path d=\"M300 400c80 -80 160 -80 240 0s80 160 0 240s-160 80 -240 0s-80 -160 0 -240z\" fill=\"#cc3366\"/></svg>"
   },
-  "curves/fastcrop": {
-    "raw": 277,
-    "gzip": 196,
-    "stats": {
-      "initialBytes": 334,
-      "optimizedBytes": 277,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 2,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 0
-    },
-    "digest": "bf7f562f30bddccd",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1024 1024\"><path d=\"M512 100c288 0 388 200 388 412S800 924 512 924S124 724 124 512S224 100 512 100z\" fill=\"#3366cc\"/><path d=\"M300 400c80 -80 160 -80 240 0s80 160 0 240s-160 80 -240 0s-80 -160 0 -240z\" fill=\"#cc3366\"/></svg>"
-  },
   "curves/raster": {
     "raw": 271,
     "gzip": 190,
@@ -314,25 +257,6 @@ export const BASELINE: Baseline = {
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1024\" height=\"1024\" viewBox=\"0 0 1024 1024\"><path d=\"M512 100c288 0 388 200 388 412S800 924 512 924S124 724 124 512S224 100 512 100z\" fill=\"#3366cc\" /><path d=\"M300 400c80 -80 160 -80 240 0s80 160 0 240s-160 80 -240 0s-80 -160 0 -240z\" fill=\"#cc3366\" /></svg>"
   },
   "rects/crop": {
-    "raw": 185,
-    "gzip": 144,
-    "stats": {
-      "initialBytes": 218,
-      "optimizedBytes": 185,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 3,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 0
-    },
-    "digest": "feac034f67499fb5",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M5 45V5h90v40z\" fill=\"#347\"/><path d=\"M5 95V55h40v40z\" fill=\"#a51\"/><path d=\"M55 55h40v40H55z\" fill=\"#0b7\"/></svg>"
-  },
-  "rects/fastcrop": {
     "raw": 185,
     "gzip": 144,
     "stats": {
@@ -403,25 +327,6 @@ export const BASELINE: Baseline = {
     "digest": "c83c6c89d7a9b434",
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><rect x=\"10\" y=\"10\" width=\"30\" height=\"30\" fill=\"#0a0\"/><rect x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"#123456\"/><circle cx=\"50\" cy=\"50\" r=\"30\" fill=\"#fc0\"/></svg>"
   },
-  "occlusion/fastcrop": {
-    "raw": 227,
-    "gzip": 161,
-    "stats": {
-      "initialBytes": 227,
-      "optimizedBytes": 227,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 0,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 1,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 1
-    },
-    "digest": "c83c6c89d7a9b434",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><rect x=\"10\" y=\"10\" width=\"30\" height=\"30\" fill=\"#0a0\"/><rect x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"#123456\"/><circle cx=\"50\" cy=\"50\" r=\"30\" fill=\"#fc0\"/></svg>"
-  },
   "occlusion/raster": {
     "raw": 207,
     "gzip": 164,
@@ -456,25 +361,6 @@ export const BASELINE: Baseline = {
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><path d=\"M0 100V0h100v100z\" fill=\"#123456\" /><path d=\"M20 50C20 33.431 33.431 20 50 20s30 13.431 30 30S66.569 80 50 80S20 66.569 20 50z\" fill=\"#ffcc00\" /></svg>"
   },
   "offsetViewBox/crop": {
-    "raw": 166,
-    "gzip": 144,
-    "stats": {
-      "initialBytes": 166,
-      "optimizedBytes": 166,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 0,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 1
-    },
-    "digest": "a0cd389918761a3c",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-12 -12 24 24\"><circle cx=\"0\" cy=\"0\" r=\"10\" fill=\"#e11\"/><rect x=\"-4\" y=\"-4\" width=\"8\" height=\"8\" fill=\"#11e\"/></svg>"
-  },
-  "offsetViewBox/fastcrop": {
     "raw": 166,
     "gzip": 144,
     "stats": {
@@ -545,25 +431,6 @@ export const BASELINE: Baseline = {
     "digest": "86efc4c2d8a3b62e",
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 100 100\"><rect x=\"10\" y=\"10\" width=\"40\" height=\"40\" fill=\"#e11\"/><circle cx=\"70\" cy=\"70\" r=\"20\" fill=\"#11e\"/></svg>"
   },
-  "scaledViewBox/fastcrop": {
-    "raw": 193,
-    "gzip": 150,
-    "stats": {
-      "initialBytes": 193,
-      "optimizedBytes": 193,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 0,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 1
-    },
-    "digest": "86efc4c2d8a3b62e",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 100 100\"><rect x=\"10\" y=\"10\" width=\"40\" height=\"40\" fill=\"#e11\"/><circle cx=\"70\" cy=\"70\" r=\"20\" fill=\"#11e\"/></svg>"
-  },
   "scaledViewBox/raster": {
     "raw": 217,
     "gzip": 172,
@@ -598,25 +465,6 @@ export const BASELINE: Baseline = {
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 100 100\"><path d=\"M10 50V10h40v40z\" fill=\"#ee1111\" /><path d=\"M50 70C50 58.954 58.954 50 70 50s20 8.954 20 20S81.046 90 70 90S50 81.046 50 70z\" fill=\"#1111ee\" /></svg>"
   },
   "donut/crop": {
-    "raw": 233,
-    "gzip": 172,
-    "stats": {
-      "initialBytes": 252,
-      "optimizedBytes": 233,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 2,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 0
-    },
-    "digest": "ce87d536f5415dbd",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M50 5a45 45 0 1 0 0 90A45 45 0 1 0 50 5zm0 20a25 25 0 1 1 0 50a25 25 0 1 1 0 -50z\" fill=\"#444\" fill-rule=\"evenodd\"/><path d=\"M40 60V40h20v20z\" fill=\"#0bf\"/></svg>"
-  },
-  "donut/fastcrop": {
     "raw": 233,
     "gzip": 172,
     "stats": {
@@ -687,25 +535,6 @@ export const BASELINE: Baseline = {
     "digest": "326afdb24f5f0799",
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M50 90V50h40v40z\" fill=\"#c00\"/><path d=\"M0 20V0h20v20z\" fill=\"#00c\"/></svg>"
   },
-  "transformed/fastcrop": {
-    "raw": 146,
-    "gzip": 132,
-    "stats": {
-      "initialBytes": 223,
-      "optimizedBytes": 146,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 2,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 1,
-      "fallbackTriggered": 0
-    },
-    "digest": "326afdb24f5f0799",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M50 90V50h40v40z\" fill=\"#c00\"/><path d=\"M0 20V0h20v20z\" fill=\"#00c\"/></svg>"
-  },
   "transformed/raster": {
     "raw": 146,
     "gzip": 132,
@@ -740,25 +569,6 @@ export const BASELINE: Baseline = {
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><path d=\"M50 90V50h40v40z\" fill=\"#cc0000\" /><path d=\"M0 20V0h20v20z\" fill=\"#0000cc\" /></svg>"
   },
   "inheritPaint/crop": {
-    "raw": 155,
-    "gzip": 146,
-    "stats": {
-      "initialBytes": 176,
-      "optimizedBytes": 155,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 0,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 0
-    },
-    "digest": "dd9c8acc0257c0e4",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M10 10h35v35H10zm45 45h35v35H55z\" fill=\"#3a7\" stroke=\"#036\" stroke-width=\"3\"/></svg>"
-  },
-  "inheritPaint/fastcrop": {
     "raw": 155,
     "gzip": 146,
     "stats": {
@@ -829,25 +639,6 @@ export const BASELINE: Baseline = {
     "digest": "b83a59d497936cf0",
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M0 100V0h100v100z\" fill=\"#eee\"/><path d=\"M10 20h80\" stroke=\"#c00\" stroke-width=\"2\"/><path d=\"M10 50h80\" fill=\"none\" stroke=\"#00c\" stroke-width=\"2\"/><path d=\"M10 70h40h40\" fill=\"none\" stroke=\"#0a0\" stroke-width=\"2\"/></svg>"
   },
-  "strokeOnly/fastcrop": {
-    "raw": 292,
-    "gzip": 171,
-    "stats": {
-      "initialBytes": 339,
-      "optimizedBytes": 292,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 1,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 0
-    },
-    "digest": "b83a59d497936cf0",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M0 100V0h100v100z\" fill=\"#eee\"/><path d=\"M10 20h80\" stroke=\"#c00\" stroke-width=\"2\"/><path d=\"M10 50h80\" fill=\"none\" stroke=\"#00c\" stroke-width=\"2\"/><path d=\"M10 70h40h40\" fill=\"none\" stroke=\"#0a0\" stroke-width=\"2\"/></svg>"
-  },
   "strokeOnly/raster": {
     "raw": 292,
     "gzip": 171,
@@ -882,25 +673,6 @@ export const BASELINE: Baseline = {
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><path d=\"M0 100V0h100v100z\" fill=\"#eeeeee\" /><path d=\"M10 20h80\" fill=\"#000000\" stroke=\"#cc0000\" stroke-width=\"2\" /><path d=\"M10 50h80\" fill=\"none\" stroke=\"#0000cc\" stroke-width=\"2\" /><path d=\"M10 70h40h40\" fill=\"none\" stroke=\"#00aa00\" stroke-width=\"2\" /></svg>"
   },
   "strokeNoWidth/crop": {
-    "raw": 191,
-    "gzip": 147,
-    "stats": {
-      "initialBytes": 217,
-      "optimizedBytes": 191,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 1,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 0
-    },
-    "digest": "53665c6002633d64",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M0 100V0h100v100z\" fill=\"#eee\"/><path d=\"M10 30h80\" stroke=\"#c00\"/><path d=\"M10 60h80\" fill=\"none\" stroke=\"#c00\"/></svg>"
-  },
-  "strokeNoWidth/fastcrop": {
     "raw": 191,
     "gzip": 147,
     "stats": {
@@ -971,25 +743,6 @@ export const BASELINE: Baseline = {
     "digest": "fd734005fc654b1c",
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><rect x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"#eee\"/><rect x=\"10\" y=\"20\" width=\"80\" height=\"0.6\" fill=\"#000\"/><rect x=\"10\" y=\"40\" width=\"80\" height=\"0.6\" fill=\"#000\"/><circle cx=\"50\" cy=\"70\" r=\"1.2\" fill=\"#c00\"/></svg>"
   },
-  "thin/fastcrop": {
-    "raw": 283,
-    "gzip": 166,
-    "stats": {
-      "initialBytes": 283,
-      "optimizedBytes": 283,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 0,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 1
-    },
-    "digest": "fd734005fc654b1c",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><rect x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"#eee\"/><rect x=\"10\" y=\"20\" width=\"80\" height=\"0.6\" fill=\"#000\"/><rect x=\"10\" y=\"40\" width=\"80\" height=\"0.6\" fill=\"#000\"/><circle cx=\"50\" cy=\"70\" r=\"1.2\" fill=\"#c00\"/></svg>"
-  },
   "thin/raster": {
     "raw": 300,
     "gzip": 188,
@@ -1024,25 +777,6 @@ export const BASELINE: Baseline = {
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><path d=\"M0 100V0h100v100z\" fill=\"#eeeeee\" /><path d=\"M10 20.6V20h80v0.6z\" fill=\"#000000\" /><path d=\"M10 40.6V40h80v0.6z\" fill=\"#000000\" /><path d=\"M48.8 70c0 -0.663 0.537 -1.2 1.2 -1.2s1.2 0.537 1.2 1.2s-0.537 1.2 -1.2 1.2S48.8 70.663 48.8 70z\" fill=\"#cc0000\" /></svg>"
   },
   "repeated/crop": {
-    "raw": 271,
-    "gzip": 182,
-    "stats": {
-      "initialBytes": 314,
-      "optimizedBytes": 271,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 2,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 1,
-      "fallbackTriggered": 0
-    },
-    "digest": "0f7bebbd125b854f",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M10 10c8 0 14 6 14 14S18 38 10 38S-4 32 -4 24S2 10 10 10z\" fill=\"#c33\"/><path d=\"M50 10c8 0 14 6 14 14S58 38 50 38S36 32 36 24S42 10 50 10z\" fill=\"#3c3\"/><path d=\"M10 90V60h80v30z\" fill=\"#333\"/></svg>"
-  },
-  "repeated/fastcrop": {
     "raw": 271,
     "gzip": 182,
     "stats": {
@@ -1113,25 +847,6 @@ export const BASELINE: Baseline = {
     "digest": "176ab5a0ec8a715d",
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M10 90V10h80v80z\" fill=\"none\" stroke=\"#000\" stroke-dasharray=\"8 4\" stroke-width=\"3\"/></svg>"
   },
-  "dashed/fastcrop": {
-    "raw": 162,
-    "gzip": 149,
-    "stats": {
-      "initialBytes": 178,
-      "optimizedBytes": 162,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 1,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 0
-    },
-    "digest": "176ab5a0ec8a715d",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M10 90V10h80v80z\" fill=\"none\" stroke=\"#000\" stroke-dasharray=\"8 4\" stroke-width=\"3\"/></svg>"
-  },
   "dashed/raster": {
     "raw": 162,
     "gzip": 149,
@@ -1184,25 +899,6 @@ export const BASELINE: Baseline = {
     "digest": "1b0c8fdcf5b308c1",
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M10 60V10h50v50z\" fill=\"#f0a\" opacity=\"0.500\"/><path d=\"M40 90V40h50v50z\" fill=\"#0af\" opacity=\"0.500\"/></svg>"
   },
-  "groupOpacity/fastcrop": {
-    "raw": 180,
-    "gzip": 143,
-    "stats": {
-      "initialBytes": 201,
-      "optimizedBytes": 180,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 2,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 0,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 0
-    },
-    "digest": "1b0c8fdcf5b308c1",
-    "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M10 60V10h50v50z\" fill=\"#f0a\" opacity=\"0.500\"/><path d=\"M40 90V40h50v50z\" fill=\"#0af\" opacity=\"0.500\"/></svg>"
-  },
   "groupOpacity/raster": {
     "raw": 176,
     "gzip": 141,
@@ -1237,24 +933,6 @@ export const BASELINE: Baseline = {
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><path d=\"M10 60V10h50v50z\" fill=\"#ff00aa\" opacity=\"0.50\" /><path d=\"M40 90V40h50v50z\" fill=\"#00aaff\" opacity=\"0.50\" /></svg>"
   },
   "logo.svg/crop": {
-    "raw": 84190,
-    "gzip": 21774,
-    "stats": {
-      "initialBytes": 84197,
-      "optimizedBytes": 84190,
-      "removedElements": 0,
-      "invisibleElements": 0,
-      "degenerateElements": 0,
-      "optimizedPaths": 0,
-      "gapRepairs": 0,
-      "booleanUnions": 0,
-      "hiddenLayers": 1,
-      "flattenedTransforms": 0,
-      "fallbackTriggered": 1
-    },
-    "digest": "5ff3d20c61a9a36b"
-  },
-  "logo.svg/fastcrop": {
     "raw": 84190,
     "gzip": 21774,
     "stats": {

@@ -90,10 +90,6 @@
             "description": "Standard vector boolean cuts",
             "label": "Geometry"
           },
-          "fastcrop": {
-            "description": "Vector boolean cuts, looser size guards",
-            "label": "Fast crop"
-          },
           "raster": {
             "description": "Canvas coverage test, drops hidden shapes",
             "label": "Raster"

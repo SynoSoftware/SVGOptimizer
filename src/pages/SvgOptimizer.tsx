@@ -53,12 +53,11 @@ import { AnimatePresence, Reorder, useDragControls } from "framer-motion";
 // --- IMPORTS (Mocked for this example) ---
 // Replace these with your actual import paths
 import { optimizeSvg as optimizeCrop, DEFAULT_OPTIMIZER_OPTIONS as DEFAULT_CROP_OPTIONS } from "../utils/svgOptimizer-crop";
-import { optimizeSvg as optimizeFastCrop, DEFAULT_OPTIMIZER_OPTIONS as DEFAULT_FASTCROP_OPTIONS } from "../utils/svgOptimizer-fastcrop";
 import { optimizeSvgRaster as optimizeRaster, DEFAULT_RASTER_OPTIONS } from "../utils/svgOptimizer-raster";
 import { optimizeSvg as optimizeScissor } from "../utils/svgOptimizer-scissor";
 
 // --- TYPES ---
-type ProcessorType = "crop" | "fastcrop" | "raster" | "scissor";
+type ProcessorType = "crop" | "raster" | "scissor";
 
 interface PipelineStep {
   id: string;
@@ -85,13 +84,6 @@ const ALGORITHM_CONFIG = {
     accentClass: "text-accent",
     desc: "Standard vector boolean cuts",
     defaults: DEFAULT_CROP_OPTIONS,
-  },
-  fastcrop: {
-    label: "Fast Crop",
-    icon: Zap,
-    accentClass: "text-amber-500",
-    desc: "Vector boolean cuts, looser size guards",
-    defaults: DEFAULT_FASTCROP_OPTIONS,
   },
   raster: {
     label: "Raster",
@@ -297,33 +289,6 @@ function StepSettings({ type, options, onChange }: { type: ProcessorType; option
                 <Label>{t("optimizer.pipeline.settings.fields.traps")}</Label>
               </Checkbox.Content>
             </Checkbox>
-          </div>
-        </div>
-      );
-    case "fastcrop":
-      return (
-        <div className="grid gap-4 p-2">
-          <div className="flex gap-2">
-            <div className="flex-1">
-              <SettingSlider
-                label={t("optimizer.pipeline.settings.fields.precision")}
-                value={options.precision}
-                min={0.1}
-                max={4}
-                step={0.1}
-                onChange={(v: number) => onChange("precision", v)}
-              />
-            </div>
-            <div className="flex-1">
-              <SettingSlider
-                label={t("optimizer.pipeline.settings.fields.simplify")}
-                value={options.simplifyTolerance}
-                min={0.1}
-                max={5}
-                step={0.1}
-                onChange={(v: number) => onChange("simplifyTolerance", v)}
-              />
-            </div>
           </div>
         </div>
       );
@@ -634,9 +599,9 @@ export default function SvgOptimizerPage() {
   const [pipeline, setPipeline] = useState<PipelineStep[]>([
     {
       id: "1",
-      type: "fastcrop",
+      type: "crop",
       active: true,
-      options: { ...DEFAULT_FASTCROP_OPTIONS },
+      options: { ...DEFAULT_CROP_OPTIONS },
     },
     {
       id: "2",
@@ -701,7 +666,6 @@ export default function SvgOptimizerPage() {
         // Execute Algorithm (Mocked logic hookup)
         let res: any = {};
         if (step.type === "crop") res = await optimizeCrop(currentSvg, step.options, updateStepProgress);
-        else if (step.type === "fastcrop") res = await optimizeFastCrop(currentSvg, step.options, updateStepProgress);
         else if (step.type === "raster") res = await optimizeRaster(currentSvg, step.options, updateStepProgress);
         else if (step.type === "scissor") res = await optimizeScissor(currentSvg, step.options, updateStepProgress);
 

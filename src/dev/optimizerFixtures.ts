@@ -6,7 +6,7 @@
  * new one, so the next change has to keep clearing it.
  */
 
-export type EngineName = "crop" | "fastcrop" | "raster" | "scissor";
+export type EngineName = "crop" | "raster" | "scissor";
 
 export type Fixture = {
   name: string;
@@ -116,7 +116,7 @@ export const FIXTURES: Fixture[] = [
     name: "logo.svg",
     guards: "the real project asset, end to end",
     url: "/logo.svg",
-    tolerance: { crop: 1.6, fastcrop: 1.6 },
+    tolerance: { crop: 1.6 },
     why: "the two vector engines accept 11 boolean cuts on this file and then trap the cut shapes, which thickens their outlines by design (enableTraps). raster and scissor make no cuts here and match exactly. This is the measurement behind shipping the asset with cuts turned off.",
   },
 ];

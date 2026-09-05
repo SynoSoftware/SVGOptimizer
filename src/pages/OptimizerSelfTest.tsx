@@ -6,6 +6,7 @@ import { describeDrift } from "../dev/optimizerBaseline";
 import {
   baselineSource,
   runSelfTest,
+  ENGINES,
   SIZES,
   type Report,
 } from "../dev/optimizerSelfTest";
@@ -56,8 +57,8 @@ export default function OptimizerSelfTest() {
         <div>
           <h1 className="text-2xl font-bold">Optimizer self-test</h1>
           <p className="text-sm text-foreground/60">
-            {FIXTURES.length} fixtures &times; 4 engines, rendered before and
-            after at {SIZES.join(", ")} px.
+            {FIXTURES.length} fixtures &times; {Object.keys(ENGINES).length}{" "}
+            engines, rendered before and after at {SIZES.join(", ")} px.
           </p>
         </div>
         <div className="flex gap-2">

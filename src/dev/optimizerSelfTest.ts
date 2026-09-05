@@ -11,7 +11,6 @@
  */
 
 import { optimizeSvg as optimizeCrop } from "../utils/svgOptimizer-crop";
-import { optimizeSvg as optimizeFastCrop } from "../utils/svgOptimizer-fastcrop";
 import { optimizeSvgRaster } from "../utils/svgOptimizer-raster";
 import { optimizeSvg as optimizeScissor } from "../utils/svgOptimizer-scissor";
 import {
@@ -55,14 +54,9 @@ const numericStats = (stats: unknown): Record<string, number> => {
   return out;
 };
 
-const ENGINES: Record<EngineName, (svg: string) => Promise<EngineRun>> = {
+export const ENGINES: Record<EngineName, (svg: string) => Promise<EngineRun>> = {
   crop: (s) =>
     optimizeCrop(s).then((r) => ({
-      svg: r.optimizedSvg,
-      stats: numericStats(r.stats),
-    })),
-  fastcrop: (s) =>
-    optimizeFastCrop(s).then((r) => ({
       svg: r.optimizedSvg,
       stats: numericStats(r.stats),
     })),
