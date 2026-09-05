@@ -29,16 +29,39 @@ npm run dev
 
 ## The acceptance gate
 
-`/selftest` runs 17 fixtures through all four engines, renders the original and
-the output at 256, 512 and 1024 px, and counts the pixels that actually differ.
-It exists because the engines' own numbers cannot tell you whether the picture
-survived, and every safety threshold in them is otherwise a guess.
+`/selftest` runs 17 fixtures through all four engines and asks two questions.
+A row has to clear both.
 
-Expect **68 passed, 0 failed**. Keep the tab in front while it runs; a
-background tab slows the renders down several times over.
+**Did the picture survive?** The original and the output are rendered at 256,
+512 and 1024 px and compared pixel by pixel. The engines' own numbers cannot
+tell you this, and every safety threshold in them is otherwise a guess.
 
-Three rows carry a recorded allowance rather than zero, each with its reason in
-`src/dev/optimizerFixtures.ts`:
+**Did anything change since last time?** Output digest, raw and gzipped size,
+and the engine's counters are compared against `src/dev/optimizerBaseline.ts`.
+
+The second question exists because the first has a hole you can drive a bus
+through: an engine that returned its input untouched scores zero pixels of
+difference and passes. It cannot tell "works correctly" from "does nothing" —
+which is exactly what a refactor produces when a guard quietly starts rejecting
+everything. Turning off boolean cutting, for instance, leaves every picture
+correct and is caught only by the second question:
+
+```
+occlusion/crop       hiddenLayers 1->0
+logo.svg/crop        output changed
+```
+
+Expect **68 passed, 0 failed, 0 drifted**, about a minute. Keep the tab in
+front while it runs; a background tab slows the renders down several times
+over.
+
+When a row drifts, decide which it is. Intended? Press **Copy baseline** and
+paste the result over the `BASELINE` literal. Not intended? You just caught a
+regression. A row missing from the baseline reports as new rather than quietly
+passing, so a partial baseline cannot be mistaken for green.
+
+Three rows carry a recorded pixel allowance rather than zero, each with its
+reason in `src/dev/optimizerFixtures.ts`:
 
 - **dashed** — a `<rect>` becomes a path with a different start point, so the
   dashes land at a different phase. The geometry is identical.

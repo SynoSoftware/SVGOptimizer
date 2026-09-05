@@ -2,21 +2,33 @@ import { Button, Card, CardBody, Chip, Progress } from "@heroui/react";
 import { useState } from "react";
 import Container from "../components/Container";
 import { FIXTURES } from "../dev/optimizerFixtures";
-import { runSelfTest, SIZES, type Report } from "../dev/optimizerSelfTest";
+import { describeDrift } from "../dev/optimizerBaseline";
+import {
+  baselineSource,
+  runSelfTest,
+  SIZES,
+  type Report,
+} from "../dev/optimizerSelfTest";
 
 /**
- * Development-only page. Runs every fixture through every engine and reports
- * how much of the picture changed, so a threshold can be tuned against a
- * measurement rather than a guess.
+ * Development-only page.
+ *
+ * It answers two separate questions, and a row has to clear both. "changed" is
+ * how far the output drifted from the *input* - did the picture survive.
+ * "drift" is how far it moved from the *last recorded run* - did anything
+ * change that you did not mean to change. A refactor can leave the first
+ * spotless while breaking the second.
  */
 export default function OptimizerSelfTest() {
   const [report, setReport] = useState<Report | null>(null);
   const [running, setRunning] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [progress, setProgress] = useState({ done: 0, total: 1, label: "" });
 
   const run = async () => {
     setRunning(true);
     setReport(null);
+    setCopied(false);
     try {
       const result = await runSelfTest((done, total, label) =>
         setProgress({ done, total, label })
@@ -26,6 +38,12 @@ export default function OptimizerSelfTest() {
     } finally {
       setRunning(false);
     }
+  };
+
+  const copyBaseline = async () => {
+    if (!report) return;
+    await navigator.clipboard.writeText(baselineSource(report));
+    setCopied(true);
   };
 
   const pct = (n: number) => n.toFixed(3) + "%";
@@ -42,9 +60,16 @@ export default function OptimizerSelfTest() {
             after at {SIZES.join(", ")} px.
           </p>
         </div>
-        <Button color="primary" onPress={run} isLoading={running}>
-          {running ? "Running" : "Run"}
-        </Button>
+        <div className="flex gap-2">
+          {report && (
+            <Button variant="flat" onPress={copyBaseline}>
+              {copied ? "Copied" : "Copy baseline"}
+            </Button>
+          )}
+          <Button color="primary" onPress={run} isLoading={running}>
+            {running ? "Running" : "Run"}
+          </Button>
+        </div>
       </div>
 
       {running && (
@@ -60,10 +85,15 @@ export default function OptimizerSelfTest() {
       {report && (
         <Card>
           <CardBody className="overflow-x-auto">
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-2 mb-4 flex-wrap">
               <Chip color={report.failed ? "danger" : "success"} variant="flat">
                 {report.passed} passed, {report.failed} failed
               </Chip>
+              {report.drifted > 0 && (
+                <Chip color="warning" variant="flat">
+                  {report.drifted} drifted from the baseline
+                </Chip>
+              )}
               <Chip variant="flat">{report.ms} ms</Chip>
             </div>
             <table className="text-xs font-mono w-full">
@@ -107,6 +137,14 @@ export default function OptimizerSelfTest() {
                         <span className="text-danger">{r.error}</span>
                       ) : r.pass ? (
                         <span className="text-success">pass</span>
+                      ) : r.drift.length > 0 &&
+                        r.pctChanged <= r.tolerance ? (
+                        // The picture is fine; something moved since the
+                        // baseline. Read the reason and either accept it with
+                        // "Copy baseline" or treat it as a regression.
+                        <span className="text-warning">
+                          {r.drift.map(describeDrift).join("; ")}
+                        </span>
                       ) : (
                         <span className="text-danger">FAIL</span>
                       )}

@@ -19,6 +19,15 @@ import {
   type EngineName,
   type Fixture,
 } from "./optimizerFixtures";
+import {
+  BASELINE,
+  HASH_ONLY,
+  compareToBaseline,
+  describeDrift,
+  digestOf,
+  type BaselineEntry,
+  type Drift,
+} from "./optimizerBaseline";
 
 /** Channel-sum difference above which a pixel counts as changed. */
 const PIXEL_DELTA = 30;
@@ -34,11 +43,39 @@ const DEFAULT_TOLERANCE = 1;
  */
 export const SIZES = [256, 512, 1024];
 
-const ENGINES: Record<EngineName, (svg: string) => Promise<string>> = {
-  crop: (s) => optimizeCrop(s).then((r) => r.optimizedSvg),
-  fastcrop: (s) => optimizeFastCrop(s).then((r) => r.optimizedSvg),
-  raster: (s) => optimizeSvgRaster(s).then((r) => r.optimizedSvg),
-  scissor: (s) => optimizeScissor(s).then((r) => r.svg),
+/** Both the document and the counters, so a silent stop-optimizing is visible. */
+type EngineRun = { svg: string; stats: Record<string, number> };
+
+const numericStats = (stats: unknown): Record<string, number> => {
+  const out: Record<string, number> = {};
+  for (const [k, v] of Object.entries((stats ?? {}) as Record<string, unknown>)) {
+    // runtimeMs is wall-clock and would drift on every run.
+    if (typeof v === "number" && k !== "runtimeMs") out[k] = v;
+  }
+  return out;
+};
+
+const ENGINES: Record<EngineName, (svg: string) => Promise<EngineRun>> = {
+  crop: (s) =>
+    optimizeCrop(s).then((r) => ({
+      svg: r.optimizedSvg,
+      stats: numericStats(r.stats),
+    })),
+  fastcrop: (s) =>
+    optimizeFastCrop(s).then((r) => ({
+      svg: r.optimizedSvg,
+      stats: numericStats(r.stats),
+    })),
+  raster: (s) =>
+    optimizeSvgRaster(s).then((r) => ({
+      svg: r.optimizedSvg,
+      stats: numericStats(r.stats),
+    })),
+  scissor: (s) =>
+    optimizeScissor(s).then((r) => ({
+      svg: r.svg,
+      stats: numericStats(r.stats),
+    })),
 };
 
 export type Result = {
@@ -57,6 +94,10 @@ export type Result = {
   /** Share of pixels past PIXEL_DELTA at each size, for reading the trend. */
   bySize: { size: number; pctChanged: number; maxDelta: number }[];
   tolerance: number;
+  /** How this run differs from the recorded one; empty means nothing moved. */
+  drift: Drift[];
+  /** What a refreshed baseline would record for this row. */
+  entry: BaselineEntry;
   pass: boolean;
   error?: string;
 };
@@ -66,7 +107,25 @@ export type Report = {
   passed: number;
   failed: number;
   ms: number;
+  /** Rows whose output moved, separated from rows that merely look wrong. */
+  drifted: number;
 };
+
+/** The BASELINE literal this run would write, ready to paste back. */
+export function baselineSource(report: Report): string {
+  const indent = (text: string) => text.split("\n").join("\n  ");
+  const entries = report.results
+    .filter((r) => !r.error)
+    .map(
+      (r) =>
+        "  " +
+        JSON.stringify(r.fixture + "/" + r.engine) +
+        ": " +
+        indent(JSON.stringify(r.entry, null, 2))
+    )
+    .join(",\n");
+  return "export const BASELINE: Baseline = {\n" + entries + ",\n};\n";
+}
 
 export async function gzipSize(text: string): Promise<number> {
   if (typeof CompressionStream === "undefined") return byteSize(text);
@@ -164,9 +223,9 @@ export async function runSelfTest(
       const tolerance = toleranceFor(fixture, engine);
       onProgress?.(done, total, fixture.name + " / " + engine);
       const t0 = performance.now();
-      let output: string;
+      let run: EngineRun;
       try {
-        output = await ENGINES[engine](source);
+        run = await ENGINES[engine](source);
       } catch (error) {
         results.push(
           failure(
@@ -180,6 +239,18 @@ export async function runSelfTest(
         continue;
       }
       const ms = Math.round(performance.now() - t0);
+      const output = run.svg;
+
+      // What this run would record, and how it differs from what is recorded.
+      const entry: BaselineEntry = {
+        raw: byteSize(output),
+        gzip: await gzipSize(output),
+        stats: run.stats,
+        digest: await digestOf(output),
+      };
+      if (!HASH_ONLY.has(fixture.name)) entry.output = output;
+      const key = fixture.name + "/" + engine;
+      const drift = compareToBaseline(BASELINE[key], entry);
 
       let maxDelta = 0;
       let pctChanged = 0;
@@ -211,15 +282,19 @@ export async function runSelfTest(
         engine,
         ms,
         rawIn,
-        rawOut: byteSize(output),
+        rawOut: entry.raw,
         gzipIn,
-        gzipOut: await gzipSize(output),
+        gzipOut: entry.gzip,
         maxDelta,
         pctChanged: +pctChanged.toFixed(3),
         worstSize,
         bySize,
         tolerance,
-        pass: !renderFailed && pctChanged <= tolerance,
+        drift,
+        entry,
+        // Both questions have to be answered: the picture survived, and
+        // nothing moved that was not meant to.
+        pass: !renderFailed && pctChanged <= tolerance && drift.length === 0,
         error: renderFailed ? "render failed" : undefined,
       });
       done += 1;
@@ -231,6 +306,7 @@ export async function runSelfTest(
     results,
     passed: results.filter((r) => r.pass).length,
     failed: results.filter((r) => !r.pass).length,
+    drifted: results.filter((r) => r.drift.length > 0).length,
     ms: Math.round(performance.now() - started),
   };
 }
@@ -261,6 +337,8 @@ function failure(
     worstSize: 0,
     bySize: [],
     tolerance,
+    drift: [],
+    entry: { raw: 0, gzip: 0, stats: {}, digest: "" },
     pass: false,
     error,
   };
