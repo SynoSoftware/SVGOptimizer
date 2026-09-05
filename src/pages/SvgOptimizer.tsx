@@ -25,7 +25,6 @@ import {
   ChevronDown,
   Copy,
   FileDown,
-  GripVertical,
   ImageIcon,
   Layers,
   Maximize2,
@@ -47,12 +46,13 @@ import Container from "../components/Container";
 import Hint from "../components/Hint";
 
 // --- WORLD CLASS LIBRARIES ---
-import { AnimatePresence, Reorder, useDragControls } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 // --- IMPORTS (Mocked for this example) ---
 // Replace these with your actual import paths
 import { optimizeSvg as optimizeCrop, DEFAULT_OPTIMIZER_OPTIONS as DEFAULT_CROP_OPTIONS } from "../utils/svgOptimizer-crop";
 import { optimizeSvgRaster as optimizeRaster, DEFAULT_RASTER_OPTIONS } from "../utils/svgOptimizer-raster";
+import { compressedSize } from "../utils/compressedSize";
 
 // --- TYPES ---
 type ProcessorType = "crop" | "raster";
@@ -72,6 +72,9 @@ interface PipelineHistoryEntry {
   startSizeBytes?: number;
   endSizeBytes?: number;
   isOriginal?: boolean;
+  /** What this candidate costs to ship; the number the winner is chosen on. */
+  compressedBytes?: number;
+  isWinner?: boolean;
 }
 
 // --- CONFIG ---
@@ -452,7 +455,6 @@ function ComparePreview({ original, optimized, className, isFullScreen, onToggle
 
 // --- NEW SUB-COMPONENT TO FIX SLIDER CONFLICT ---
 const PipelineStepItem = ({ step, config, updateStepOption, toggleStepActive, removeStep, t }: any) => {
-  const dragControls = useDragControls();
   const Icon = config.icon;
   // The settings used to hang off an Accordion, which insisted on its own
   // full-width trigger row. That doubled the height of every step for a
@@ -460,15 +462,7 @@ const PipelineStepItem = ({ step, config, updateStepOption, toggleStepActive, re
   const [showSettings, setShowSettings] = useState(false);
 
   return (
-    <Reorder.Item
-      value={step}
-      dragListener={false} // DISABLE default drag
-      dragControls={dragControls} // CONNECT controls
-      whileDrag={{
-        scale: 1.02,
-        zIndex: 20,
-        boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-      }}
+    <motion.div
       initial={{ opacity: 0, y: 10, height: 0 }}
       animate={{ opacity: 1, y: 0, height: "auto" }}
       exit={{ opacity: 0, scale: 0.9, height: 0, margin: 0 }}
@@ -479,13 +473,6 @@ const PipelineStepItem = ({ step, config, updateStepOption, toggleStepActive, re
       )}
     >
       <div className="flex items-center gap-2 p-2">
-        <div
-          className="cursor-grab touch-none p-2 text-muted hover:text-foreground active:cursor-grabbing active:text-accent"
-          onPointerDown={(e) => dragControls.start(e)}
-        >
-          <GripVertical size={16} />
-        </div>
-
         <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface-tertiary", config.accentClass)}>
           <Icon size={16} />
         </div>
@@ -529,7 +516,7 @@ const PipelineStepItem = ({ step, config, updateStepOption, toggleStepActive, re
           <StepSettings type={step.type} options={step.options} onChange={(k: string, v: any) => updateStepOption(step.id, k, v)} />
         </div>
       )}
-    </Reorder.Item>
+    </motion.div>
   );
 };
 
@@ -546,6 +533,7 @@ export default function SvgOptimizerPage() {
     totalRuntimeMs?: number;
     originalSizeBytes?: number;
     finalSizeBytes?: number;
+    keptOriginal?: boolean;
   } | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -602,6 +590,18 @@ export default function SvgOptimizerPage() {
   };
 
   // --- ENGINE ---
+  /**
+   * Every enabled engine runs against the same source and the cheapest result
+   * wins. They used to run in sequence, each consuming the last one's output,
+   * with nothing checking the total: crop would return a file untouched, raster
+   * would inflate it, and the inflated version shipped. A 166 byte file came
+   * back at 199 and the page called it a saving.
+   *
+   * The comparison is on compressed size because that is what a browser
+   * downloads, and raw and gzipped size disagree in direction often enough to
+   * matter. The source is a candidate too, so a run that finds nothing worth
+   * doing returns the file it was given rather than the least bad rewrite.
+   */
   const runPipeline = async () => {
     if (!source) return;
     setIsRunning(true);
@@ -609,7 +609,6 @@ export default function SvgOptimizerPage() {
     setPipelineError(null);
     const pipelineStart = now();
 
-    let currentSvg = source;
     const originalSize = new Blob([source]).size;
     const history: PipelineHistoryEntry[] = [
       {
@@ -626,39 +625,50 @@ export default function SvgOptimizerPage() {
     const activeSteps = pipeline.filter((p) => p.active);
     const stepWeight = 100 / (activeSteps.length || 1);
 
-    let previousSize = originalSize;
     try {
+      const sourceCost = await compressedSize(source);
+      let best = { svg: source, cost: sourceCost, label: null as string | null };
+
       for (let i = 0; i < activeSteps.length; i++) {
         const step = activeSteps[i];
-        const updateStepProgress = (pct: number) => setProgress(i * stepWeight + pct * (stepWeight / 100));
+        const updateStepProgress = (pct: number) =>
+          setProgress(i * stepWeight + pct * (stepWeight / 100));
 
-        // Execute Algorithm (Mocked logic hookup)
         let res: any = {};
-        if (step.type === "crop") res = await optimizeCrop(currentSvg, step.options, updateStepProgress);
-        else if (step.type === "raster") res = await optimizeRaster(currentSvg, step.options, updateStepProgress);
+        if (step.type === "crop") res = await optimizeCrop(source, step.options, updateStepProgress);
+        else if (step.type === "raster") res = await optimizeRaster(source, step.options, updateStepProgress);
 
-        const nextSvg = res.optimizedSvg || res.svg;
-        if (!nextSvg) throw new Error("step-failed");
-        currentSvg = nextSvg;
+        const candidate = res.optimizedSvg || res.svg;
+        if (!candidate) throw new Error("step-failed");
+
+        const label = t(`optimizer.pipeline.settings.algorithms.${step.type}.label`);
+        const cost = await compressedSize(candidate);
+        if (cost < best.cost) best = { svg: candidate, cost, label };
+
         const runtimeMs =
           typeof res?.stats?.runtimeMs === "number" ? res.stats.runtimeMs : typeof res?.stats?.runtime === "number" ? res.stats.runtime : undefined;
-        const sizeBytes = new Blob([currentSvg]).size;
         history.push({
-          label: t(`optimizer.pipeline.settings.algorithms.${step.type}.label`),
-          svg: currentSvg,
-          sizeBytes,
+          label,
+          svg: candidate,
+          sizeBytes: new Blob([candidate]).size,
           durationMs: runtimeMs,
-          startSizeBytes: previousSize,
-          endSizeBytes: sizeBytes,
+          startSizeBytes: originalSize,
+          endSizeBytes: new Blob([candidate]).size,
+          compressedBytes: cost,
         });
-        previousSize = sizeBytes;
       }
+
+      for (const entry of history) {
+        if (!entry.isOriginal) entry.isWinner = entry.label === best.label;
+      }
+
       setResult({
-        svg: currentSvg,
+        svg: best.svg,
         history,
         totalRuntimeMs: now() - pipelineStart,
         originalSizeBytes: originalSize,
-        finalSizeBytes: new Blob([currentSvg]).size,
+        finalSizeBytes: new Blob([best.svg]).size,
+        keptOriginal: best.label === null,
       });
     } catch (e) {
       if (e instanceof Error) {
@@ -774,7 +784,7 @@ export default function SvgOptimizerPage() {
                       {pipeline.length}
                     </Chip>
                   </div>
-                  <div className="text-[10px] text-foreground/40">{t("optimizer.pipeline.panel.reorderHint")}</div>
+                  <div className="text-[10px] text-foreground/40">{t("optimizer.pipeline.panel.compareHint")}</div>
                 </div>
 
                 {/* --- FIX 1: ALGORITHM BUTTON GRID --- */}
@@ -828,10 +838,9 @@ export default function SvgOptimizerPage() {
                   </div>
                 )}
 
-                <Reorder.Group axis="y" values={pipeline} onReorder={setPipeline} className="flex flex-col gap-3" layoutScroll>
+                <div className="flex flex-col gap-3">
                   <AnimatePresence initial={false} mode="popLayout">
                     {pipeline.map((step) => (
-                      // --- FIX 2: Using the extracted component for stable Drag/Slider ---
                       <PipelineStepItem
                         key={step.id}
                         step={step}
@@ -843,7 +852,7 @@ export default function SvgOptimizerPage() {
                       />
                     ))}
                   </AnimatePresence>
-                </Reorder.Group>
+                </div>
               </CardContent>
 
               <CardFooter className="shrink-0 flex-col gap-3 p-3 pt-0 bg-surface-secondary/30 border-t border-separator/50">
@@ -907,6 +916,11 @@ export default function SvgOptimizerPage() {
                         })}
                       </Chip>
                     </div>
+                    {result.keptOriginal && (
+                      <p className="mt-1 text-xs text-foreground/50">
+                        {t("optimizer.pipeline.history.keptOriginal")}
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
@@ -1046,7 +1060,14 @@ export default function SvgOptimizerPage() {
                                   <div className="flex-1 min-w-0 grid grid-cols-12 gap-4 items-center">
                                     {/* Column 1: Label & Time */}
                                     <div className="col-span-4 flex flex-col justify-center">
-                                      <span className="font-semibold text-sm truncate text-foreground">{entry.label}</span>
+                                      <span className="flex items-center gap-1.5">
+                                        <span className="font-semibold text-sm truncate text-foreground">{entry.label}</span>
+                                        {entry.isWinner && (
+                                          <Chip color="success" variant="soft" className="h-4 min-h-0 px-1 text-[9px] uppercase">
+                                            {t("optimizer.pipeline.history.winner")}
+                                          </Chip>
+                                        )}
+                                      </span>
                                       <span className="text-[10px] text-foreground/40 font-mono flex items-center gap-1">
                                         <Timer size={8} />
                                         {entry.durationMs?.toFixed(0)}ms

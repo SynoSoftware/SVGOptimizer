@@ -5,6 +5,7 @@ import {
   type RasterOptimizationOptions,
   DEFAULT_RASTER_OPTIONS,
 } from "./svgOptimizer-raster";
+import { compressedSize } from "./compressedSize";
 
 const OPACITY_EPS = 5e-3;
 
@@ -1704,27 +1705,6 @@ function buildSteps(stats: OptimizationStats): OptimizationStep[] {
     { key: "fallbackTriggered", count: stats.fallbackTriggered },
   ];
   return s.filter((x) => x.count > 0) as OptimizationStep[];
-}
-
-/**
- * Compressed size of a document, which is what actually ships.
- *
- * Raw and compressed size do not move together. Cutting a path against its
- * neighbours makes the string shorter but its coordinates more varied, and
- * varied coordinates compress worse: on the sample logo the raw-smaller output
- * cost 9% more over the wire. A guard that reads raw length is reading the
- * wrong number.
- */
-async function compressedSize(text: string): Promise<number> {
-  if (typeof CompressionStream === "undefined") return byteSize(text);
-  try {
-    const stream = new Blob([text])
-      .stream()
-      .pipeThrough(new CompressionStream("gzip"));
-    return (await new Response(stream).arrayBuffer()).byteLength;
-  } catch {
-    return byteSize(text);
-  }
 }
 
 function byteSize(str: string) {

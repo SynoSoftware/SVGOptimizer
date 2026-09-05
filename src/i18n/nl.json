@@ -1,14 +1,14 @@
 {
   "common": {
     "language": {
-      "label": "Taal",
       "en": "English",
+      "label": "Taal",
       "nl": "Nederlands"
     },
     "theme": {
+      "dark": "Donker",
       "label": "Thema",
       "light": "Licht",
-      "dark": "Donker",
       "toggle": "Thema wisselen"
     }
   },
@@ -64,6 +64,7 @@
           "ms": "{{value}} ms",
           "seconds": "{{value}} s"
         },
+        "keptOriginal": "Niets was beter dan het origineel, dus het bleef ongewijzigd",
         "original": "Origineel: {{size}}",
         "sizeLabel": "Grootte: {{size}}",
         "step": "{{name}}: {{size}}",
@@ -72,10 +73,11 @@
         "totalOptimizedLabel": "Geoptimaliseerd",
         "totalOriginalLabel": "Origineel",
         "totalRuntimeLabel": "Totale duur",
-        "totalSavingsLabel": "{{value}}% bespaard"
+        "totalSavingsLabel": "{{value}}% bespaard",
+        "winner": "gekozen"
       },
       "panel": {
-        "reorderHint": "Sleep om te herschikken",
+        "compareHint": "Beste resultaat wint",
         "title": "Pipeline"
       },
       "results": {

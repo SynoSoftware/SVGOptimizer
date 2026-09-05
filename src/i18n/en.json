@@ -1,14 +1,14 @@
 {
   "common": {
     "language": {
-      "label": "Language",
       "en": "English",
+      "label": "Language",
       "nl": "Nederlands"
     },
     "theme": {
+      "dark": "Dark",
       "label": "Theme",
       "light": "Light",
-      "dark": "Dark",
       "toggle": "Switch theme"
     }
   },
@@ -64,6 +64,7 @@
           "ms": "{{value}} ms",
           "seconds": "{{value}} s"
         },
+        "keptOriginal": "Nothing beat the original, so it was left alone",
         "original": "Original: {{size}}",
         "sizeLabel": "Size: {{size}}",
         "step": "{{name}}: {{size}}",
@@ -72,10 +73,11 @@
         "totalOptimizedLabel": "Optimized",
         "totalOriginalLabel": "Original",
         "totalRuntimeLabel": "Total runtime",
-        "totalSavingsLabel": "Saved {{value}}%"
+        "totalSavingsLabel": "Saved {{value}}%",
+        "winner": "kept"
       },
       "panel": {
-        "reorderHint": "Drag to reorder",
+        "compareHint": "Best result wins",
         "title": "Pipeline"
       },
       "results": {
