@@ -53,7 +53,7 @@
         "hint": "Simplified tree with truncated attributes for diffing.",
         "parseError": "Error parsing SVG structure."
       },
-      "heading": "Make your SVG smaller",
+      "heading": "Smaller SVG, or your file back untouched",
       "history": {
         "duration": {
           "minutes": "{{value}} min",
@@ -110,7 +110,7 @@
         },
         "toggleLabel": "Toggle step"
       },
-      "subheading": "Two engines run on your file. The smaller result wins.",
+      "subheading": "Two engines compete on every file and the winner is decided on gzipped size — the bytes a browser actually downloads.",
       "tabs": {
         "code": "Code",
         "history": "Comparison",

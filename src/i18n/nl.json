@@ -53,7 +53,7 @@
         "hint": "Vereenvoudigde boomstructuur met ingekorte attributen voor diffing.",
         "parseError": "Fout bij parsen SVG-structuur."
       },
-      "heading": "Maak je SVG kleiner",
+      "heading": "Kleinere SVG, of je bestand ongewijzigd terug",
       "history": {
         "duration": {
           "minutes": "{{value}} min",
@@ -110,7 +110,7 @@
         },
         "toggleLabel": "Stap in-/uitschakelen"
       },
-      "subheading": "Twee engines draaien op je bestand. Het kleinste resultaat wint.",
+      "subheading": "Twee engines strijden om elk bestand en de winnaar wordt bepaald op gzip-grootte — de bytes die een browser echt downloadt.",
       "tabs": {
         "code": "Code",
         "history": "Vergelijking",
