@@ -64,7 +64,7 @@
           "ms": "{{value}} ms",
           "seconds": "{{value}} s"
         },
-        "keptOriginal": "Nothing beat the original, so it was left alone",
+        "keptOriginal": "Original kept",
         "original": "Original: {{size}}",
         "sizeLabel": "Size: {{size}}",
         "step": "{{name}}: {{size}}",

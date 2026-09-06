@@ -64,7 +64,7 @@
           "ms": "{{value}} ms",
           "seconds": "{{value}} s"
         },
-        "keptOriginal": "Niets was beter dan het origineel, dus het bleef ongewijzigd",
+        "keptOriginal": "Origineel behouden",
         "original": "Origineel: {{size}}",
         "sizeLabel": "Grootte: {{size}}",
         "step": "{{name}}: {{size}}",

@@ -902,33 +902,39 @@ export default function SvgOptimizerPage() {
               </div>
             ) : (
               <Card className="border border-border shadow-md">
-                <CardHeader className="flex flex-col sm:flex-row sm:justify-between gap-4 px-6 py-4">
+                <CardHeader className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 px-6 py-4">
                   <div className="flex flex-col">
                     <p className="text-xs font-bold uppercase text-foreground/50">{t("optimizer.pipeline.results.finalSize")}</p>
 
                     <div className="flex items-baseline gap-2">
-                      <span className="text-2xl font-bold">{formatBytes(new Blob([result.svg]).size)}</span>
+                      <span className="whitespace-nowrap text-2xl font-bold">{formatBytes(new Blob([result.svg]).size)}</span>
 
-                      <Chip color="success" variant="soft">
-                        <Check size={12} className="mr-1 inline" aria-hidden />
-                        {t("optimizer.pipeline.results.saved", {
-                          percent: totalSavingsPercent.toFixed(1),
-                        })}
-                      </Chip>
+                      {/*
+                        A green tick reading "Saved 0.0%" was the wrong thing to
+                        show when nothing won, and the explanation underneath it
+                        cost three wrapped lines. One chip says it instead.
+                      */}
+                      {result.keptOriginal ? (
+                        <Chip variant="soft" className="shrink-0 whitespace-nowrap">
+                          {t("optimizer.pipeline.history.keptOriginal")}
+                        </Chip>
+                      ) : (
+                        <Chip color="success" variant="soft" className="shrink-0 whitespace-nowrap">
+                          <Check size={12} className="mr-1 inline" aria-hidden />
+                          {t("optimizer.pipeline.results.saved", {
+                            percent: totalSavingsPercent.toFixed(1),
+                          })}
+                        </Chip>
+                      )}
                     </div>
-                    {result.keptOriginal && (
-                      <p className="mt-1 text-xs text-foreground/50">
-                        {t("optimizer.pipeline.history.keptOriginal")}
-                      </p>
-                    )}
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                  <div className="flex flex-col sm:flex-row gap-2 w-full xl:w-auto xl:shrink-0">
                     <Hint content={t("optimizer.pipeline.tooltips.moveOptimizedToSource")}>
                       <Button
                         variant="secondary"
                         onPress={handleUseAsSource}
-                        className="w-full sm:w-auto"
+                        className="w-full sm:w-auto whitespace-nowrap"
                       >
                         {t("optimizer.pipeline.tooltips.useAsSource")}
                       </Button>
@@ -946,7 +952,7 @@ export default function SvgOptimizerPage() {
                         a.download = `optimized.svg`;
                         a.click();
                       }}
-                      className="w-full sm:w-auto"
+                      className="w-full sm:w-auto whitespace-nowrap"
                     >
                       <FileDown size={16} className="mr-2" aria-hidden />
                       {t("optimizer.pipeline.tooltips.download")}
