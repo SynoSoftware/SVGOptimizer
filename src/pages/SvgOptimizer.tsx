@@ -3,7 +3,6 @@ import {
   ButtonGroup,
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   Checkbox,
   Chip,
@@ -36,9 +35,7 @@ import {
   Replace,
   Settings2,
   Timer,
-  Trash2,
   Upload,
-  Zap,
 } from "lucide-react";
 import { useEffect, useRef, useState, type MouseEvent, type WheelEvent } from "react";
 import { useTranslation } from "react-i18next";
@@ -96,8 +93,6 @@ const ALGORITHM_CONFIG = {
 };
 
 // --- HELPERS ---
-
-const generateId = () => Math.random().toString(36).substring(2, 9);
 
 const formatBytes = (bytes: number, decimals = 2) => {
   if (!bytes) return "0 B";
@@ -454,7 +449,7 @@ function ComparePreview({ original, optimized, className, isFullScreen, onToggle
 }
 
 // --- NEW SUB-COMPONENT TO FIX SLIDER CONFLICT ---
-const PipelineStepItem = ({ step, config, updateStepOption, toggleStepActive, removeStep, t }: any) => {
+const PipelineStepItem = ({ step, config, updateStepOption, toggleStepActive, t }: any) => {
   const Icon = config.icon;
   // The settings used to hang off an Accordion, which insisted on its own
   // full-width trigger row. That doubled the height of every step for a
@@ -505,9 +500,6 @@ const PipelineStepItem = ({ step, config, updateStepOption, toggleStepActive, re
           >
             <ChevronDown size={14} className={cn("transition-transform", showSettings && "rotate-180")} />
           </Button>
-          <Button isIconOnly variant="danger-soft" className="min-w-8 w-8 h-8" onPress={() => removeStep(step.id)}>
-            <Trash2 size={14} />
-          </Button>
         </div>
       </div>
 
@@ -533,6 +525,8 @@ export default function SvgOptimizerPage() {
     totalRuntimeMs?: number;
     originalSizeBytes?: number;
     finalSizeBytes?: number;
+    originalCompressedBytes?: number;
+    finalCompressedBytes?: number;
     keptOriginal?: boolean;
   } | null>(null);
   const [isRunning, setIsRunning] = useState(false);
@@ -553,6 +547,55 @@ export default function SvgOptimizerPage() {
     setLoadedFileName(file.name);
     setResult(null);
   };
+  /**
+   * The page takes a drop anywhere, not just on the upload card.
+   *
+   * There is one input on this screen, so a dropped file has exactly one
+   * possible meaning and aiming at a 340x135 rectangle is a needless miss.
+   * dragenter and dragleave fire per element as the pointer crosses the tree,
+   * so they are counted rather than trusted individually, and dragover has to
+   * be defaulted or the browser navigates away to the file.
+   */
+  const onFileRef = useRef(handleFileProcess);
+  onFileRef.current = handleFileProcess;
+  useEffect(() => {
+    let depth = 0;
+    const carriesFile = (e: DragEvent) =>
+      Array.from(e.dataTransfer?.types ?? []).includes("Files");
+    const enter = (e: DragEvent) => {
+      if (!carriesFile(e)) return;
+      depth += 1;
+      setIsDragging(true);
+    };
+    const over = (e: DragEvent) => {
+      if (carriesFile(e)) e.preventDefault();
+    };
+    const leave = (e: DragEvent) => {
+      if (!carriesFile(e)) return;
+      depth = Math.max(0, depth - 1);
+      if (depth === 0) setIsDragging(false);
+    };
+    const drop = (e: DragEvent) => {
+      if (!carriesFile(e)) return;
+      e.preventDefault();
+      depth = 0;
+      setIsDragging(false);
+      const file = e.dataTransfer?.files?.[0];
+      if (file) void onFileRef.current(file);
+    };
+    window.addEventListener("dragenter", enter);
+    window.addEventListener("dragover", over);
+    window.addEventListener("dragleave", leave);
+    window.addEventListener("drop", drop);
+    return () => {
+      window.removeEventListener("dragenter", enter);
+      window.removeEventListener("dragover", over);
+      window.removeEventListener("dragleave", leave);
+      window.removeEventListener("drop", drop);
+    };
+  }, []);
+
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [pipeline, setPipeline] = useState<PipelineStep[]>([
     {
       id: "1",
@@ -567,19 +610,15 @@ export default function SvgOptimizerPage() {
       options: { ...DEFAULT_RASTER_OPTIONS },
     },
   ]);
+  // Reported against compressed size, because that is what the pipeline picks
+  // the winner on and what a browser actually downloads. The two disagree: the
+  // same run can be 22.8% smaller raw and 18.1% smaller over the wire.
   const totalSavingsPercent =
-    result && typeof result.originalSizeBytes === "number" && result.originalSizeBytes > 0
-      ? ((result.originalSizeBytes - (result.finalSizeBytes || 0)) / result.originalSizeBytes) * 100
+    result && typeof result.originalCompressedBytes === "number" && result.originalCompressedBytes > 0
+      ? ((result.originalCompressedBytes - (result.finalCompressedBytes || 0)) / result.originalCompressedBytes) * 100
       : 0;
 
-  const addStep = (type: ProcessorType) => {
-    const defaults = { ...ALGORITHM_CONFIG[type].defaults };
-    setPipeline([...pipeline, { id: generateId(), type, active: true, options: defaults }]);
-  };
 
-  const removeStep = (id: string) => {
-    setPipeline(pipeline.filter((p) => p.id !== id));
-  };
 
   const updateStepOption = (id: string, key: string, val: any) => {
     setPipeline(pipeline.map((p) => (p.id === id ? { ...p, options: { ...p.options, [key]: val } } : p)));
@@ -669,6 +708,8 @@ export default function SvgOptimizerPage() {
         totalRuntimeMs: now() - pipelineStart,
         originalSizeBytes: originalSize,
         finalSizeBytes: new Blob([best.svg]).size,
+        originalCompressedBytes: sourceCost,
+        finalCompressedBytes: best.cost,
         keptOriginal: best.label === null,
       });
     } catch (e) {
@@ -701,6 +742,15 @@ export default function SvgOptimizerPage() {
 
   return (
     <section className="w-full py-8">
+      {/* Whole-page drop target: the cue has to cover what the cue accepts. */}
+      {isDragging && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-3 rounded-3xl border-2 border-dashed border-accent bg-surface/80 px-12 py-10 text-center shadow-2xl">
+            <Upload className="h-10 w-10 text-accent" aria-hidden />
+            <p className="text-lg font-semibold text-foreground">{t("optimizer.pipeline.upload.drop")}</p>
+          </div>
+        </div>
+      )}
       <Container>
         {/* v3 modals take isOpen via the root and wrap the dialog in a
             container; the close callback is no longer passed as a child. */}
@@ -729,23 +779,8 @@ export default function SvgOptimizerPage() {
 
         <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
           {/* LEFT: Builder */}
-          <div className="flex flex-col gap-6 lg:col-span-5">
+          <div className="flex flex-col gap-6 lg:col-span-4">
             <Card
-              onDragOver={(e) => {
-                e.preventDefault();
-                setIsDragging(true);
-              }}
-              onDragLeave={(e) => {
-                e.preventDefault();
-                setIsDragging(false);
-              }}
-              onDrop={(e) => {
-                e.preventDefault();
-                setIsDragging(false);
-                if (e.dataTransfer.files?.[0]) {
-                  handleFileProcess(e.dataTransfer.files[0]);
-                }
-              }}
               className={cn(
                 "shrink-0 border-2 border-dashed transition-all",
                 isDragging
@@ -771,94 +806,26 @@ export default function SvgOptimizerPage() {
                   className={cn("mb-2 transition-colors", isDragging ? "text-accent scale-110" : source ? "text-success" : "text-muted")}
                 />
                 <p className={cn("text-sm font-medium", isDragging && "text-accent")}>
-                  {isDragging ? "Drop SVG here" : loadedFileName || t("optimizer.pipeline.upload.cta")}
+                  {loadedFileName || t("optimizer.pipeline.upload.cta")}
                 </p>
                 {source && !isDragging && <p className="mt-1 text-xs text-foreground/50">{formatBytes(new Blob([source]).size)}</p>}
               </CardContent>
             </Card>
-            <Card className="flex max-h-[80vh] flex-col border border-border">
-              <CardHeader className="shrink-0 flex-col gap-2 px-4 py-4 bg-surface/50 backdrop-blur-sm z-10">
-                <div className="flex w-full items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-foreground/60">{t("optimizer.pipeline.panel.title")}</span>
-                    <Chip variant="soft" className="h-5 min-h-0 px-1 text-[10px]">
-                      {pipeline.length}
-                    </Chip>
-                  </div>
-                  <div className="text-[10px] text-foreground/40">{t("optimizer.pipeline.panel.compareHint")}</div>
-                </div>
-
-                {/* --- FIX 1: ALGORITHM BUTTON GRID --- */}
-                {/* Mobile: 2x2 Grid (Big Squares). Desktop: 4x1 Row. */}
-                <div className="grid w-full grid-cols-2 gap-2">
-                  {(Object.entries(ALGORITHM_CONFIG) as [ProcessorType, any][]).map(([key, config]) => {
-                    const Icon = config.icon;
-                    const labelKey = `optimizer.pipeline.settings.algorithms.${key}.label`;
-                    const descKey = `optimizer.pipeline.settings.algorithms.${key}.description`;
-                    return (
-                      <Hint
-                        key={key}
-                        content={
-                          <div className="px-1 py-1 text-center">
-                            <div className="text-xs font-bold">{t(labelKey, { defaultValue: config.label })}</div>
-                            <div className="text-[10px] text-foreground/70">{t(descKey, { defaultValue: config.desc })}</div>
-                          </div>
-                        }
-                        delay={600}
-                        closeDelay={0}
-                      >
-                        <Button
-                          variant="tertiary"
-                          onPress={() => addStep(key)}
-                          className={cn(
-                            "group h-9 w-full min-w-0 flex items-center justify-start gap-2 px-2.5",
-                            "rounded-lg border border-border bg-surface transition-colors",
-                            "hover:border-accent/50 hover:bg-surface-secondary active:scale-95"
-                          )}
-                        >
-                          <Icon size={14} strokeWidth={2.5} className={cn("shrink-0", config.accentClass)} />
-                          <span className="truncate text-[10px] font-bold uppercase tracking-wide text-foreground/70">
-                            {t(labelKey, { defaultValue: config.label })}
-                          </span>
-                        </Button>
-                      </Hint>
-                    );
-                  })}
-                </div>
-              </CardHeader>
-
-              <Separator className="opacity-50" />
-
-              {/* PIPELINE LIST */}
-              <CardContent className="flex-1 overflow-y-auto overflow-x-hidden p-3 bg-surface-secondary/30">
-                {pipeline.length === 0 && (
-                  <div className="flex h-full flex-col items-center justify-center text-center text-sm text-foreground/40 min-h-[150px]">
-                    <Layers size={32} className="mb-2 opacity-20" />
-                    <p>{t("optimizer.pipeline.empty.title")}</p>
-                    <p className="text-xs opacity-70">{t("optimizer.pipeline.empty.hint")}</p>
-                  </div>
-                )}
-
-                <div className="flex flex-col gap-3">
-                  <AnimatePresence initial={false} mode="popLayout">
-                    {pipeline.map((step) => (
-                      <PipelineStepItem
-                        key={step.id}
-                        step={step}
-                        config={ALGORITHM_CONFIG[step.type]}
-                        updateStepOption={updateStepOption}
-                        toggleStepActive={toggleStepActive}
-                        removeStep={removeStep}
-                        t={t}
-                      />
-                    ))}
-                  </AnimatePresence>
-                </div>
-              </CardContent>
-
-              <CardFooter className="shrink-0 flex-col gap-3 p-3 pt-0 bg-surface-secondary/30 border-t border-separator/50">
+            {/*
+              Two engines, both on by default, and the tool measures which won.
+              This was a pipeline builder - add a step, drag to reorder, delete
+              - back when steps fed each other. They compete on the same input
+              now, so there is no order to set and nothing to add: adding
+              Geometry twice would run identical work and tie with itself. The
+              toggles are behind Advanced because nobody can predict the winner
+              (crop takes small clean files, raster took your Inkscape exports
+              by 7x, and one 325 byte file came down to a single byte), and the
+              results panel already says who won once it is actually known.
+            */}
+            <Card className="border border-border">
+              <CardContent className="flex flex-col gap-3 p-4">
                 {pipelineError && (
-                  <div className="mt-3 flex w-full items-center gap-2 rounded-lg border border-danger/20 bg-danger/10 p-2 text-xs text-danger">
+                  <div className="flex w-full items-center gap-2 rounded-lg border border-danger/20 bg-danger/10 p-2 text-xs text-danger">
                     <AlertCircle size={14} />
                     <span className="truncate">{pipelineError}</span>
                   </div>
@@ -880,19 +847,45 @@ export default function SvgOptimizerPage() {
 
                 <Button
                   variant="primary"
-                  className="w-full font-bold shadow-md shadow-accent/20 mt-3"
+                  className="w-full font-bold shadow-md shadow-accent/20"
                   onPress={runPipeline}
                   isDisabled={isRunning || !source || pipeline.filter((p) => p.active).length === 0}
                 >
                   {!isRunning && <Play size={16} fill="currentColor" className="mr-2" />}
                   {isRunning ? t("optimizer.pipeline.buttons.running") : t("optimizer.pipeline.buttons.run")}
                 </Button>
-              </CardFooter>
+
+                <Button
+                  variant="ghost"
+                  className="w-full justify-between px-2 text-[10px] font-bold uppercase tracking-widest text-foreground/50"
+                  aria-expanded={showAdvanced}
+                  onPress={() => setShowAdvanced((v) => !v)}
+                >
+                  <span>{t("optimizer.pipeline.panel.advanced")}</span>
+                  <ChevronDown size={14} className={cn("transition-transform", showAdvanced && "rotate-180")} />
+                </Button>
+
+                {showAdvanced && (
+                  <div className="flex flex-col gap-2 border-t border-separator/50 pt-3">
+                    <p className="text-[10px] text-foreground/40">{t("optimizer.pipeline.panel.compareHint")}</p>
+                    {pipeline.map((step) => (
+                      <PipelineStepItem
+                        key={step.id}
+                        step={step}
+                        config={ALGORITHM_CONFIG[step.type]}
+                        updateStepOption={updateStepOption}
+                        toggleStepActive={toggleStepActive}
+                        t={t}
+                      />
+                    ))}
+                  </div>
+                )}
+              </CardContent>
             </Card>
           </div>
 
           {/* RIGHT: Results */}
-          <div className="flex flex-col gap-6 lg:col-span-7 lg:sticky lg:top-6">
+          <div className="flex flex-col gap-6 lg:col-span-8 lg:sticky lg:top-6">
             {!result ? (
               <div className="flex min-h-[500px] flex-col items-center justify-center rounded-3xl border border-dashed border-border bg-surface/30 p-8 text-center text-foreground/40">
                 <div className="mb-4 rounded-full bg-surface-tertiary p-6">

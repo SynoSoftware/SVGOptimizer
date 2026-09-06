@@ -44,7 +44,7 @@
     },
     "pipeline": {
       "buttons": {
-        "run": "Run pipeline",
+        "run": "Optimize",
         "running": "Processing..."
       },
       "debug": {
@@ -53,11 +53,7 @@
         "hint": "Simplified tree with truncated attributes for diffing.",
         "parseError": "Error parsing SVG structure."
       },
-      "empty": {
-        "hint": "Add steps from above.",
-        "title": "Pipeline is empty."
-      },
-      "heading": "SVG optimization pipeline",
+      "heading": "Make your SVG smaller",
       "history": {
         "duration": {
           "minutes": "{{value}} min",
@@ -79,14 +75,14 @@
         "winner": "kept"
       },
       "panel": {
-        "compareHint": "Best result wins",
-        "title": "Pipeline"
+        "advanced": "Advanced",
+        "compareHint": "Best result wins"
       },
       "results": {
         "finalSize": "Final size",
-        "readyBody": "Configure your stack on the left and hit Run.",
+        "readyBody": "Drop an SVG anywhere on the page, or click above.",
         "readyTitle": "Ready to optimize",
-        "saved": "Saved {{percent}}%"
+        "saved": "Saved {{percent}}% gzipped"
       },
       "settings": {
         "algorithms": {
@@ -114,10 +110,10 @@
         },
         "toggleLabel": "Toggle step"
       },
-      "subheading": "Professional grade vector processing stack.",
+      "subheading": "Two engines run on your file. The smaller result wins.",
       "tabs": {
         "code": "Code",
-        "history": "Pipeline stats",
+        "history": "Comparison",
         "preview": "Preview",
         "resultsLabel": "Result views",
         "structure": "Debug"
@@ -128,7 +124,8 @@
         "useAsSource": "Use as source"
       },
       "upload": {
-        "cta": "Click to upload SVG"
+        "cta": "Click to upload SVG",
+        "drop": "Drop your SVG anywhere"
       }
     },
     "preview": {

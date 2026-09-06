@@ -44,7 +44,7 @@
     },
     "pipeline": {
       "buttons": {
-        "run": "Pipeline draaien",
+        "run": "Optimaliseren",
         "running": "Verwerken..."
       },
       "debug": {
@@ -53,11 +53,7 @@
         "hint": "Vereenvoudigde boomstructuur met ingekorte attributen voor diffing.",
         "parseError": "Fout bij parsen SVG-structuur."
       },
-      "empty": {
-        "hint": "Voeg stappen van hierboven toe.",
-        "title": "Pipeline is leeg."
-      },
-      "heading": "SVG optimalisatie pipeline",
+      "heading": "Maak je SVG kleiner",
       "history": {
         "duration": {
           "minutes": "{{value}} min",
@@ -79,14 +75,14 @@
         "winner": "gekozen"
       },
       "panel": {
-        "compareHint": "Beste resultaat wint",
-        "title": "Pipeline"
+        "advanced": "Geavanceerd",
+        "compareHint": "Beste resultaat wint"
       },
       "results": {
         "finalSize": "Uiteindelijke grootte",
-        "readyBody": "Configureer uw stack links en druk op Run.",
+        "readyBody": "Zet een SVG ergens op de pagina neer, of klik hierboven.",
         "readyTitle": "Klaar om te optimaliseren",
-        "saved": "{{percent}}% bespaard"
+        "saved": "{{percent}}% bespaard, gzipped"
       },
       "settings": {
         "algorithms": {
@@ -114,10 +110,10 @@
         },
         "toggleLabel": "Stap in-/uitschakelen"
       },
-      "subheading": "Professionele vectorverwerkingsstack.",
+      "subheading": "Twee engines draaien op je bestand. Het kleinste resultaat wint.",
       "tabs": {
         "code": "Code",
-        "history": "Pipeline stats",
+        "history": "Vergelijking",
         "preview": "Voorbeeld",
         "resultsLabel": "Resultaat weergaven",
         "structure": "Debug"
@@ -128,7 +124,8 @@
         "useAsSource": "Gebruik als bron"
       },
       "upload": {
-        "cta": "Klik om SVG te uploaden"
+        "cta": "Klik om SVG te uploaden",
+        "drop": "Zet je SVG overal neer"
       }
     },
     "preview": {

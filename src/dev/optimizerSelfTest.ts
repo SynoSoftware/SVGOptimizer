@@ -146,7 +146,14 @@ function render(svg: string, size: number): Promise<Uint8ClampedArray | null> {
         // reads as a total difference rather than a silent pass.
       }
       URL.revokeObjectURL(url);
-      resolve(ctx.getImageData(0, 0, size, size).data);
+      const pixels = ctx.getImageData(0, 0, size, size).data;
+      // Drop the backing store now rather than waiting for a collection. A run
+      // makes about nine of these per fixture at up to 4 MB each, and a GC
+      // pause landing inside a timed engine call is what made the ms column
+      // report 142 s for work that takes 15.
+      canvas.width = 0;
+      canvas.height = 0;
+      resolve(pixels);
     };
     image.onerror = () => {
       URL.revokeObjectURL(url);
@@ -291,6 +298,9 @@ export async function runSelfTest(
       onResult?.(row);
       done += 1;
     }
+
+    // Three full-size pixel buffers per fixture; nothing needs them again.
+    baselines.clear();
   }
 
   onProgress?.(total, total, "done");
