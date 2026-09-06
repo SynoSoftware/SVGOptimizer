@@ -627,6 +627,7 @@ export default function SvgOptimizerPage() {
 
     try {
       const sourceCost = await compressedSize(source);
+      history[0].compressedBytes = sourceCost;
       let best = { svg: source, cost: sourceCost, label: null as string | null };
 
       for (let i = 0; i < activeSteps.length; i++) {
@@ -1049,7 +1050,14 @@ export default function SvgOptimizerPage() {
                             .map((entry, i) => {
                               const start = entry.startSizeBytes || 0;
                               const end = entry.endSizeBytes || 0;
-                              const saved = start - end;
+                              // The winner is chosen on compressed size, so that
+                              // is the number the row leads with. Raw is shown
+                              // underneath because the two disagree often enough
+                              // that seeing only one of them misleads.
+                              const gzipStart = result.history[0]?.compressedBytes;
+                              const gzipEnd = entry.compressedBytes;
+                              const hasGzip = gzipStart !== undefined && gzipEnd !== undefined;
+                              const saved = hasGzip ? gzipStart - gzipEnd : start - end;
                               const isPositive = saved > 0;
 
                               return (
@@ -1080,11 +1088,26 @@ export default function SvgOptimizerPage() {
                                       </span>
                                     </div>
 
-                                    {/* Column 2: Data Flow */}
-                                    <div className="col-span-5 flex items-center gap-2 text-xs font-mono text-foreground/70">
-                                      <span>{formatBytes(start)}</span>
-                                      <ArrowRight size={10} className="opacity-30" />
-                                      <span className={cn(isPositive && "text-foreground font-medium")}>{formatBytes(end)}</span>
+                                    {/* Column 2: Data Flow, compressed first */}
+                                    <div className="col-span-5 flex flex-col gap-0.5 text-xs font-mono">
+                                      {hasGzip && (
+                                        <div className="flex items-center gap-2 text-foreground/70">
+                                          <span>{formatBytes(gzipStart)}</span>
+                                          <ArrowRight size={10} className="opacity-30" />
+                                          <span className={cn(isPositive && "text-foreground font-medium")}>{formatBytes(gzipEnd)}</span>
+                                          <span className="text-[9px] uppercase tracking-wider text-foreground/40">
+                                            {t("optimizer.pipeline.history.gzipLabel")}
+                                          </span>
+                                        </div>
+                                      )}
+                                      <div className="flex items-center gap-2 text-foreground/40">
+                                        <span>{formatBytes(start)}</span>
+                                        <ArrowRight size={10} className="opacity-30" />
+                                        <span>{formatBytes(end)}</span>
+                                        <span className="text-[9px] uppercase tracking-wider text-foreground/30">
+                                          {t("optimizer.pipeline.history.rawLabel")}
+                                        </span>
+                                      </div>
                                     </div>
 
                                     {/* Column 3: Delta Badge */}

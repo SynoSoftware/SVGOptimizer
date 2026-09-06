@@ -64,8 +64,10 @@
           "ms": "{{value}} ms",
           "seconds": "{{value}} s"
         },
+        "gzipLabel": "gzip",
         "keptOriginal": "Original kept",
         "original": "Original: {{size}}",
+        "rawLabel": "raw",
         "sizeLabel": "Size: {{size}}",
         "step": "{{name}}: {{size}}",
         "stepSizeFlow": "{{start}} → {{end}}",

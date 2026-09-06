@@ -64,8 +64,10 @@
           "ms": "{{value}} ms",
           "seconds": "{{value}} s"
         },
+        "gzipLabel": "gzip",
         "keptOriginal": "Origineel behouden",
         "original": "Origineel: {{size}}",
+        "rawLabel": "onbewerkt",
         "sizeLabel": "Grootte: {{size}}",
         "step": "{{name}}: {{size}}",
         "stepSizeFlow": "{{start}} → {{end}}",
