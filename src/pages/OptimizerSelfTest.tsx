@@ -9,6 +9,7 @@ import {
   ENGINES,
   SIZES,
   type Report,
+  type Result,
 } from "../dev/optimizerSelfTest";
 
 /**
@@ -22,6 +23,7 @@ import {
  */
 export default function OptimizerSelfTest() {
   const [report, setReport] = useState<Report | null>(null);
+  const [rows, setRows] = useState<Result[]>([]);
   const [running, setRunning] = useState(false);
   const [copied, setCopied] = useState(false);
   const [progress, setProgress] = useState({ done: 0, total: 1, label: "" });
@@ -29,10 +31,12 @@ export default function OptimizerSelfTest() {
   const run = async () => {
     setRunning(true);
     setReport(null);
+    setRows([]);
     setCopied(false);
     try {
-      const result = await runSelfTest((done, total, label) =>
-        setProgress({ done, total, label })
+      const result = await runSelfTest(
+        (done, total, label) => setProgress({ done, total, label }),
+        (row) => setRows((prev) => [...prev, row])
       );
       setReport(result);
       (window as unknown as { __selftest?: Report }).__selftest = result;
@@ -48,8 +52,26 @@ export default function OptimizerSelfTest() {
   };
 
   const pct = (n: number) => n.toFixed(3) + "%";
-  const delta = (before: number, after: number) =>
-    before === 0 ? "-" : ((100 * (after - before)) / before).toFixed(1) + "%";
+  const passedSoFar = rows.filter((r) => r.pass).length;
+  const failedSoFar = rows.filter((r) => !r.pass).length;
+  const driftedSoFar = rows.filter((r) => r.drift.length > 0).length;
+
+  /**
+   * Size against the input, coloured by direction: smaller is the point,
+   * bigger is a regression worth seeing at a glance, and unchanged means the
+   * engine either found nothing or fell back.
+   */
+  const Delta = ({ before, after }: { before: number; after: number }) => {
+    if (before === 0) return <span className="text-foreground/40">-</span>;
+    const pctChange = (100 * (after - before)) / before;
+    const tone =
+      after > before
+        ? "text-danger"
+        : after === before
+          ? "text-warning"
+          : "text-success";
+    return <span className={tone}>{pctChange.toFixed(1)}%</span>;
+  };
 
   return (
     <Container className="py-12">
@@ -83,19 +105,28 @@ export default function OptimizerSelfTest() {
         </div>
       )}
 
-      {report && (
+      {rows.length > 0 && (
         <Card>
           <CardContent className="overflow-x-auto">
             <div className="flex gap-2 mb-4 flex-wrap">
-              <Chip color={report.failed ? "danger" : "success"} variant="soft">
-                {report.passed} passed, {report.failed} failed
+              <Chip
+                color={failedSoFar ? "danger" : running ? "default" : "success"}
+                variant="soft"
+              >
+                {passedSoFar} passed, {failedSoFar} failed
               </Chip>
-              {report.drifted > 0 && (
+              {driftedSoFar > 0 && (
                 <Chip color="warning" variant="soft">
-                  {report.drifted} drifted from the baseline
+                  {driftedSoFar} drifted from the baseline
                 </Chip>
               )}
-              <Chip variant="soft">{report.ms} ms</Chip>
+              {report ? (
+                <Chip variant="soft">{report.ms} ms</Chip>
+              ) : (
+                <Chip variant="soft">
+                  {rows.length} of {progress.total}
+                </Chip>
+              )}
             </div>
             <table className="text-xs font-mono w-full">
               <thead className="text-foreground/50 text-left">
@@ -112,7 +143,7 @@ export default function OptimizerSelfTest() {
                 </tr>
               </thead>
               <tbody>
-                {report.results.map((r) => (
+                {rows.map((r) => (
                   <tr
                     key={r.fixture + r.engine}
                     className="border-t border-foreground/10"
@@ -121,10 +152,10 @@ export default function OptimizerSelfTest() {
                     <td className="pr-4">{r.engine}</td>
                     <td className="pr-4 text-right">{r.ms}</td>
                     <td className="pr-4 text-right">
-                      {delta(r.rawIn, r.rawOut)}
+                      <Delta before={r.rawIn} after={r.rawOut} />
                     </td>
                     <td className="pr-4 text-right">
-                      {delta(r.gzipIn, r.gzipOut)}
+                      <Delta before={r.gzipIn} after={r.gzipOut} />
                     </td>
                     <td className="pr-4 text-right">{pct(r.pctChanged)}</td>
                     <td className="pr-4 text-right text-foreground/40">

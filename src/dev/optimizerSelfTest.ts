@@ -179,7 +179,9 @@ async function loadFixture(fixture: Fixture): Promise<string> {
 }
 
 export async function runSelfTest(
-  onProgress?: (done: number, total: number, label: string) => void
+  onProgress?: (done: number, total: number, label: string) => void,
+  /** Fires as each row lands, so the page can fill the table while it runs. */
+  onResult?: (result: Result) => void
 ): Promise<Report> {
   const started = performance.now();
   const engines = Object.keys(ENGINES) as EngineName[];
@@ -193,9 +195,9 @@ export async function runSelfTest(
       source = await loadFixture(fixture);
     } catch (error) {
       for (const engine of engines) {
-        results.push(
-          failure(fixture.name, engine, toleranceFor(fixture, engine), String(error))
-        );
+        const row = failure(fixture.name, engine, toleranceFor(fixture, engine), String(error));
+        results.push(row);
+        onResult?.(row);
         done += 1;
       }
       continue;
@@ -215,14 +217,14 @@ export async function runSelfTest(
       try {
         run = await ENGINES[engine](source);
       } catch (error) {
-        results.push(
-          failure(
-            fixture.name,
-            engine,
-            tolerance,
-            error instanceof Error ? error.message : String(error)
-          )
+        const row = failure(
+          fixture.name,
+          engine,
+          tolerance,
+          error instanceof Error ? error.message : String(error)
         );
+        results.push(row);
+        onResult?.(row);
         done += 1;
         continue;
       }
@@ -265,7 +267,7 @@ export async function runSelfTest(
         }
       }
 
-      results.push({
+      const row: Result = {
         fixture: fixture.name,
         engine,
         ms,
@@ -284,7 +286,9 @@ export async function runSelfTest(
         // nothing moved that was not meant to.
         pass: !renderFailed && pctChanged <= tolerance && drift.length === 0,
         error: renderFailed ? "render failed" : undefined,
-      });
+      };
+      results.push(row);
+      onResult?.(row);
       done += 1;
     }
   }
