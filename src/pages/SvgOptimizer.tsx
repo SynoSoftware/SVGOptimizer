@@ -777,20 +777,16 @@ export default function SvgOptimizerPage() {
           <p className="text-foreground/60">{t("optimizer.pipeline.subheading")}</p>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
-          {/* LEFT: Builder */}
-          <div className="flex flex-col gap-6 lg:col-span-4">
-            <Card
-              className={cn(
-                "shrink-0 border-2 border-dashed transition-all",
-                isDragging
-                  ? "border-accent bg-accent/10 scale-[1.01]"
-                  : source
-                    ? "border-success/50 bg-success/5"
-                    : "border-border hover:border-accent/50 active:scale-[0.99]"
-              )}
-            >
-              <CardContent className="cursor-pointer flex-col items-center justify-center p-6 text-center" onClick={() => fileInputRef.current?.click()}>
+        <div className="flex flex-col gap-6">
+          {/*
+            The input is one file and one action, so it is a bar rather than a
+            column. It used to be a 164px dashed box in a four-twelfths column
+            next to a results panel that wanted the room; there is nothing left
+            on this side to justify a column of its own.
+          */}
+          <Card className="border border-border">
+            <CardContent className="flex flex-col gap-3 p-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -802,52 +798,43 @@ export default function SvgOptimizerPage() {
                     }
                   }}
                 />
-                <Upload
-                  className={cn("mb-2 transition-colors", isDragging ? "text-accent scale-110" : source ? "text-success" : "text-muted")}
-                />
-                <p className={cn("text-sm font-medium", isDragging && "text-accent")}>
-                  {loadedFileName || t("optimizer.pipeline.upload.cta")}
-                </p>
-                {source && !isDragging && <p className="mt-1 text-xs text-foreground/50">{formatBytes(new Blob([source]).size)}</p>}
-              </CardContent>
-            </Card>
-            {/*
-              Two engines, both on by default, and the tool measures which won.
-              This was a pipeline builder - add a step, drag to reorder, delete
-              - back when steps fed each other. They compete on the same input
-              now, so there is no order to set and nothing to add: adding
-              Geometry twice would run identical work and tie with itself. The
-              toggles are behind Advanced because nobody can predict the winner
-              (crop takes small clean files, raster took your Inkscape exports
-              by 7x, and one 325 byte file came down to a single byte), and the
-              results panel already says who won once it is actually known.
-            */}
-            <Card className="border border-border">
-              <CardContent className="flex flex-col gap-3 p-4">
-                {pipelineError && (
-                  <div className="flex w-full items-center gap-2 rounded-lg border border-danger/20 bg-danger/10 p-2 text-xs text-danger">
-                    <AlertCircle size={14} />
-                    <span className="truncate">{pipelineError}</span>
-                  </div>
-                )}
-                {isRunning && (
-                  <div className="flex w-full flex-col gap-1 rounded-xl border border-separator/70 bg-background/40 p-3 shadow-sm">
-                    <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-foreground/50">
-                      <span>{t("optimizer.form.progressLabel")}</span>
-                      <span className="font-mono text-foreground">{Math.max(0, Math.min(100, Math.round(progress)))}%</span>
-                    </div>
-                    <ProgressBar
-                      size="sm"
-                      value={progress}
-                      aria-label={t("optimizer.form.progressLabel")}
-                      isIndeterminate={progress === 0}
-                    />
-                  </div>
-                )}
+                {/*
+                  A real button, not a div with onClick. The previous target was
+                  unreachable by keyboard, and dragging is not available that way
+                  either, so the app could not be used without a mouse at all.
+                */}
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className={cn(
+                    "flex flex-1 items-center gap-3 rounded-xl border-2 border-dashed px-4 py-3 text-left transition-colors",
+                    isDragging
+                      ? "border-accent bg-accent/10"
+                      : source
+                        ? "border-success/50 bg-success/5"
+                        : "border-border hover:border-accent/50"
+                  )}
+                >
+                  <Upload
+                    size={18}
+                    className={cn("shrink-0", isDragging ? "text-accent" : source ? "text-success" : "text-muted")}
+                    aria-hidden
+                  />
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-medium">
+                      {loadedFileName || t("optimizer.pipeline.upload.cta")}
+                    </span>
+                    {source && (
+                      <span className="block text-xs text-foreground/50">
+                        {formatBytes(new Blob([source]).size)}
+                      </span>
+                    )}
+                  </span>
+                </button>
 
                 <Button
                   variant="primary"
-                  className="w-full font-bold shadow-md shadow-accent/20"
+                  className="w-full font-bold shadow-md shadow-accent/20 sm:w-auto"
                   onPress={runPipeline}
                   isDisabled={isRunning || !source || pipeline.filter((p) => p.active).length === 0}
                 >
@@ -857,35 +844,55 @@ export default function SvgOptimizerPage() {
 
                 <Button
                   variant="ghost"
-                  className="w-full justify-between px-2 text-[10px] font-bold uppercase tracking-widest text-foreground/50"
+                  className="w-full justify-between gap-2 px-3 text-[10px] font-bold uppercase tracking-widest text-foreground/50 sm:w-auto"
                   aria-expanded={showAdvanced}
                   onPress={() => setShowAdvanced((v) => !v)}
                 >
                   <span>{t("optimizer.pipeline.panel.advanced")}</span>
                   <ChevronDown size={14} className={cn("transition-transform", showAdvanced && "rotate-180")} />
                 </Button>
+              </div>
 
-                {showAdvanced && (
-                  <div className="flex flex-col gap-2 border-t border-separator/50 pt-3">
-                    <p className="text-[10px] text-foreground/40">{t("optimizer.pipeline.panel.compareHint")}</p>
-                    {pipeline.map((step) => (
-                      <PipelineStepItem
-                        key={step.id}
-                        step={step}
-                        config={ALGORITHM_CONFIG[step.type]}
-                        updateStepOption={updateStepOption}
-                        toggleStepActive={toggleStepActive}
-                        t={t}
-                      />
-                    ))}
+              {pipelineError && (
+                <div className="flex w-full items-center gap-2 rounded-lg border border-danger/20 bg-danger/10 p-2 text-xs text-danger">
+                  <AlertCircle size={14} />
+                  <span className="truncate">{pipelineError}</span>
+                </div>
+              )}
+              {isRunning && (
+                <div className="flex w-full flex-col gap-1 rounded-xl border border-separator/70 bg-background/40 p-3">
+                  <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-foreground/50">
+                    <span>{t("optimizer.form.progressLabel")}</span>
+                    <span className="font-mono text-foreground">{Math.max(0, Math.min(100, Math.round(progress)))}%</span>
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+                  <ProgressBar
+                    size="sm"
+                    value={progress}
+                    aria-label={t("optimizer.form.progressLabel")}
+                    isIndeterminate={progress === 0}
+                  />
+                </div>
+              )}
 
-          {/* RIGHT: Results */}
-          <div className="flex flex-col gap-6 lg:col-span-8 lg:sticky lg:top-6">
+              {showAdvanced && (
+                <div className="grid gap-2 border-t border-separator/50 pt-3 sm:grid-cols-2">
+                  {pipeline.map((step) => (
+                    <PipelineStepItem
+                      key={step.id}
+                      step={step}
+                      config={ALGORITHM_CONFIG[step.type]}
+                      updateStepOption={updateStepOption}
+                      toggleStepActive={toggleStepActive}
+                      t={t}
+                    />
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Results, now with the full width */}
+          <div className="flex flex-col gap-6">
             {!result ? (
               <div className="flex min-h-[500px] flex-col items-center justify-center rounded-3xl border border-dashed border-border bg-surface/30 p-8 text-center text-foreground/40">
                 <div className="mb-4 rounded-full bg-surface-tertiary p-6">
