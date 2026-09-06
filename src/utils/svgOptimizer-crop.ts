@@ -1629,8 +1629,24 @@ function reconstructSvg(shapes: ProcessedShape[]): string {
       .map(([k, v]) => k + '="' + v + '"')
       .join(" ");
 
-  const render = (shape: ProcessedShape, extra: string) => {
-    const attrs = [extra, build(shape.unique)].filter(Boolean).join(" ");
+  /**
+   * Inherited attributes, then the shape's own. A name carried by both is
+   * dropped from the inherited half, because the shape's value is the one that
+   * applies and writing both is invalid XML - innerHTML then rejects the whole
+   * document rather than the one element, losing the entire optimization.
+   * computeEffectiveStyles fills in fill-opacity on one side while the style
+   * attribute supplies it on the other, so any Inkscape file with a
+   * fill-opacity hit this; both logo3 fixtures failed outright on it.
+   *
+   * The two halves stay separate rather than merging into one sorted record,
+   * so attribute order is unchanged wherever the old code was already valid.
+   */
+  const render = (shape: ProcessedShape, inherited: Record<string, string> | null) => {
+    const own = shape.unique;
+    const notOverridden = inherited
+      ? Object.fromEntries(Object.entries(inherited).filter(([k]) => !(k in own)))
+      : {};
+    const attrs = [build(notOverridden), build(own)].filter(Boolean).join(" ");
     return '<path d="' + shape.pathData + '"' + (attrs ? " " + attrs : "") + " />";
   };
 
@@ -1642,9 +1658,10 @@ function reconstructSvg(shapes: ProcessedShape[]): string {
   const flush = () => {
     if (!run.length) return;
     if (key && run.length > 1) {
-      out.push("<g " + key + ">" + run.map((s) => render(s, "")).join("") + "</g>");
+      // The group carries them, so the children must not repeat them.
+      out.push("<g " + key + ">" + run.map((s) => render(s, null)).join("") + "</g>");
     } else {
-      out.push(run.map((s) => render(s, key ?? "")).join(""));
+      out.push(run.map((s) => render(s, s.inheritable)).join(""));
     }
     run = [];
   };

@@ -37,7 +37,11 @@ export type BaselineEntry = {
 export type Baseline = Record<string, BaselineEntry>;
 
 /** Fixtures too large to store in full; only their digest is compared. */
-export const HASH_ONLY = new Set(["logo.svg"]);
+export const HASH_ONLY = new Set([
+  "logo.svg",
+  "logo3-full.svg",
+  "logo3-full-cut.svg",
+]);
 
 export async function digestOf(text: string): Promise<string> {
   const bytes = new TextEncoder().encode(text);
@@ -707,6 +711,78 @@ export const BASELINE: Baseline = {
     },
     "digest": "8e54209af4110e6d",
     "output": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M10 60V10h50v50z\" fill=\"#f0a\" opacity=\"0.5\"/><path d=\"M40 90V40h50v50z\" fill=\"#0af\" opacity=\"0.5\"/></svg>"
+  },
+  "logo3-full.svg/crop": {
+    "raw": 127019,
+    "gzip": 35201,
+    "stats": {
+      "initialBytes": 256652,
+      "optimizedBytes": 127019,
+      "removedElements": 0,
+      "invisibleElements": 0,
+      "degenerateElements": 0,
+      "optimizedPaths": 61,
+      "gapRepairs": 0,
+      "booleanUnions": 12,
+      "hiddenLayers": 0,
+      "flattenedTransforms": 0,
+      "fallbackTriggered": 0
+    },
+    "digest": "ed1e5a61d609095d"
+  },
+  "logo3-full.svg/raster": {
+    "raw": 107990,
+    "gzip": 28659,
+    "stats": {
+      "initialBytes": 256652,
+      "optimizedBytes": 107990,
+      "removedElements": 9,
+      "invisibleElements": 0,
+      "degenerateElements": 0,
+      "optimizedPaths": 0,
+      "gapRepairs": 0,
+      "booleanUnions": 0,
+      "hiddenLayers": 9,
+      "flattenedTransforms": 0,
+      "fallbackTriggered": 0
+    },
+    "digest": "25f96e46ef375357"
+  },
+  "logo3-full-cut.svg/crop": {
+    "raw": 115753,
+    "gzip": 30497,
+    "stats": {
+      "initialBytes": 231827,
+      "optimizedBytes": 115753,
+      "removedElements": 0,
+      "invisibleElements": 0,
+      "degenerateElements": 0,
+      "optimizedPaths": 58,
+      "gapRepairs": 0,
+      "booleanUnions": 11,
+      "hiddenLayers": 0,
+      "flattenedTransforms": 0,
+      "fallbackTriggered": 0
+    },
+    "digest": "749a6f275d745372"
+  },
+  "logo3-full-cut.svg/raster": {
+    "raw": 102225,
+    "gzip": 25355,
+    "stats": {
+      "initialBytes": 231827,
+      "optimizedBytes": 102225,
+      "removedElements": 7,
+      "invisibleElements": 0,
+      "degenerateElements": 0,
+      "optimizedPaths": 0,
+      "gapRepairs": 0,
+      "booleanUnions": 0,
+      "hiddenLayers": 7,
+      "flattenedTransforms": 0,
+      "fallbackTriggered": 0
+    },
+    "digest": "b2842542da6b56dd"
   },
   "logo.svg/crop": {
     "raw": 84190,

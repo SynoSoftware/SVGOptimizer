@@ -1,3 +1,6 @@
+import logo3Full from "./fixtures/logo3-full.svg?url";
+import logo3FullCut from "./fixtures/logo3-full-cut.svg?url";
+
 /**
  * Inputs the optimizer is expected to survive.
  *
@@ -109,6 +112,20 @@ export const FIXTURES: Fixture[] = [
     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g opacity="0.5"><rect x="10" y="10" width="50" height="50" fill="#f0a"/><rect x="40" y="40" width="50" height="50" fill="#0af"/></g></svg>',
     tolerance: 5,
     why: "<g opacity> composites the whole group once. Once the group is gone each shape carries the opacity itself, so the overlap composites twice. Inherent to flattening the group.",
+  },
+  {
+    name: "logo3-full.svg",
+    url: logo3Full,
+    guards: "a real Inkscape export, 61 paths and 251 KB of editor namespaces",
+    tolerance: 3,
+    why: "hand-authored artwork rather than a hand-written test case: sodipodi and inkscape attributes, deep nesting, and far more path data than any inline fixture. It is here to catch the failures that only appear at that scale. Both engines rebuild the overlapping geometry and land 2.1-2.6% of pixels somewhere different; that is accepted deliberately, because it buys 60-67% off what the file costs to ship. The 3% allowance is set above what they do today so the fixture still fails if that grows.",
+  },
+  {
+    name: "logo3-full-cut.svg",
+    url: logo3FullCut,
+    guards: "the same artwork with three paths already cut away",
+    tolerance: 3,
+    why: "pairs with logo3-full.svg. Running both says whether the engines find the same savings on artwork that has already had work done to it, which is the case a user hits when they run the tool twice. Same accepted pixel difference as its pair.",
   },
   {
     name: "logo.svg",
